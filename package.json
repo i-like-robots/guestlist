@@ -14,11 +14,13 @@
     "@types/validator": "^6.3.0",
     "express": "^4.16.2",
     "jasmine": "^2.9.0",
+    "nyc": "^11.4.1",
     "tslint": "^5.9.1",
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.7.0"
   },
   "scripts": {
+    "coverage": "nyc npm test",
     "pretest": "npm run lint && npm run build:cjs",
     "test": "jasmine spec/*.spec.js",
     "lint": "tslint -c tslint.json src/**/*.ts spec/*.js",

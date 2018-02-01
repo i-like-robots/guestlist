@@ -4,6 +4,7 @@ dist-es6/
 typings/
 
 .vscode/
+.nyc_output/
 .rpt2_cache/
 
 .DS_Store
