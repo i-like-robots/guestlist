@@ -1,5 +1,7 @@
 node_modules/
-dist/
+dist-cjs/
+dist-es6/
+typings/
 
 .vscode/
 .rpt2_cache/

@@ -2,8 +2,9 @@
   "name": "guestlist",
   "version": "0.0.1",
   "description": "Whitelists, validates and sanitizes all of your request parameters.",
-  "main": "dist/guestlist-cjs.js",
-  "module": "dist/guestlist-es6.js",
+  "main": "dist-cjs/index.js",
+  "module": "dist-es6/index.js",
+  "types": "typings/index.d.ts",
   "dependencies": {
     "validator": "^9.4.0"
   },
@@ -13,21 +14,23 @@
     "@types/validator": "^6.3.0",
     "express": "^4.16.2",
     "jasmine": "^2.9.0",
-    "rollup": "^0.55.1",
-    "rollup-plugin-typescript2": "^0.10.0",
     "tslint": "^5.9.1",
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.7.0"
   },
   "scripts": {
-    "pretest": "npm run lint && npm run build",
+    "pretest": "npm run lint && npm run build:cjs",
     "test": "jasmine spec/*.spec.js",
     "lint": "tslint -c tslint.json src/**/*.ts spec/*.js",
-    "build": "rollup -c rollup.config.js",
+    "build": "npm run build:cjs && npm run build:es6",
+    "build:cjs": "tsc --outDir dist-cjs --module commonjs",
+    "build:es6": "tsc --outDir dist-es6 --module es2015",
     "prepublish": "npm run build"
   },
   "files": [
-    "dist",
+    "dist-cjs",
+    "dist-es6",
+    "typings",
     "examples",
     "README.md"
   ],

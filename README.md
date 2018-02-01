@@ -73,9 +73,8 @@ The `Rule` class provides a fluent interface over [validator.js]. All validator 
 
 ## Development
 
-Guestlist is written [TypeScript] and follows JavaScript [Standard] style. The module is bundled using [Rollup] and tested with [Jasmine]
+Guestlist is written [TypeScript] and follows JavaScript [Standard] style and is tested with [Jasmine]
 
 [TypeScript]: https://www.typescriptlang.org/
 [Standard]: https://standardjs.com/
-[Rollup]: https://rollupjs.org/
 [Jasmine]: http://jasmine.github.io/

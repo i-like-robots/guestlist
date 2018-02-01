@@ -1,4 +1,4 @@
-const { Rule } = require('../dist/guestlist-cjs')
+const { Rule } = require('../dist-cjs/core/rule')
 
 const fixtures = {
   term: new Rule().trim().escape(),
