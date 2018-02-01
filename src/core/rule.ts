@@ -73,38 +73,33 @@ const sanitizers = [
   'whitelist'
 ]
 
-function validatorFactory (name: string, ...args: Array<any>) {
-  this.validators.push([ validator[name], args ])
-  return this
-}
-
-function sanitizerFactory (name: string, ...args: Array<any>) {
-  this.sanitizers.push([ validator[name], args ])
+function methodFactory (type: string, method: string, ...args: Array<any>) {
+  this[type].push({ method, args })
   return this
 }
 
 export class Rule {
-  private validators: Array<[ Function, any ]>
-  private sanitizers: Array<[ Function, any ]>
+  private validators: Array<{ method: string, args: Array<any> }>
+  private sanitizers: Array<{ method: string, args: Array<any> }>
 
   constructor () {
     this.validators = []
     this.sanitizers = []
 
-    validators.forEach((validator) => {
-      this[validator] = validatorFactory.bind(this, validator)
+    validators.forEach((method) => {
+      this[method] = methodFactory.bind(this, 'validators', method)
     })
 
-    sanitizers.forEach((sanitizer) => {
-      this[sanitizer] = sanitizerFactory.bind(this, sanitizer)
+    sanitizers.forEach((method) => {
+      this[method] = methodFactory.bind(this, 'sanitizers', method)
     })
   }
 
   static validate (instance: Rule, value: any): Boolean {
     let valid = true
 
-    for (const [ method, args ] of instance.validators) {
-      valid = Reflect.apply(method, null, [ value, ...args ])
+    for (const { method, args } of instance.validators) {
+      valid = Reflect.apply(validator[method], null, [ value, ...args ])
 
       if (!valid) {
         break
@@ -115,8 +110,8 @@ export class Rule {
   }
 
   static sanitize (instance: Rule, value: any): any {
-    return instance.sanitizers.reduce((value, [ method, args ]) => (
-      Reflect.apply(method, null, [ value, ...args ])
+    return instance.sanitizers.reduce((value, { method, args }) => (
+      Reflect.apply(validator[method], null, [ value, ...args ])
     ), value)
   }
 }

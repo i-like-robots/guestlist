@@ -8,9 +8,9 @@ Whitelists, validates and sanitizes all of your request parameters. Compatible w
 const guestlist = require('guestlist')
 
 const query = guestlist.guard('query')
-  .permit('term', guestlist.rule().trim().escape())
-  .permit('date', guestlist.rule().isISO8601().toDate())
+  .permit('term', guestlist.rule().isLength({ min: 2 }).trim().escape())
   .permit('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
+  .permit('date', guestlist.rule().isISO8601().toDate())
 
 app.get('/search', query.secure(), (req, res, next) => { … });
 ```
