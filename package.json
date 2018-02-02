@@ -39,7 +39,18 @@
   "engines": {
     "node": ">= 6.0.0"
   },
-  "keywords": [],
+  "keywords": [
+    "express",
+    "middleware",
+    "validation",
+    "querystring",
+    "formdata"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:i-like-robots/guestlist.git"
+  },
+  "homepage": "https://github.com/i-like-robots/guestlist",
   "author": "Matt Hinchliffe",
   "license": "ISC"
 }
