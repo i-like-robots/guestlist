@@ -2,8 +2,7 @@ import { Rule } from './rule'
 
 export class Guard {
   public property: string
-
-  private list: Map<string, Rule>
+  public list: Map<string, Rule>
 
   constructor (property: string) {
     if (typeof property !== 'string') {

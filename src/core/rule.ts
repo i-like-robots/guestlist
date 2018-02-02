@@ -1,6 +1,6 @@
 import validator from 'validator'
 
-const validators = [
+const VALIDATORS = [
   'contains',
   'equals',
   'isAfter',
@@ -56,7 +56,7 @@ const validators = [
   'matches'
 ]
 
-const sanitizers = [
+const SANITIZERS = [
   'blacklist',
   'escape',
   'ltrim',
@@ -73,25 +73,26 @@ const sanitizers = [
   'whitelist'
 ]
 
-function methodFactory (type: string, method: string, ...args: Array<any>) {
-  this[type].push({ method, args })
-  return this
-}
-
 export class Rule {
-  private validators: Array<{ method: string, args: Array<any> }>
-  private sanitizers: Array<{ method: string, args: Array<any> }>
+  public validators: Array<{ method: string, args: Array<any> }>
+  public sanitizers: Array<{ method: string, args: Array<any> }>
 
   constructor () {
     this.validators = []
     this.sanitizers = []
 
-    validators.forEach((method) => {
-      this[method] = methodFactory.bind(this, 'validators', method)
+    VALIDATORS.forEach((method) => {
+      this[method] = (...args): this => {
+        this.validators.push({ method, args })
+        return this
+      }
     })
 
-    sanitizers.forEach((method) => {
-      this[method] = methodFactory.bind(this, 'sanitizers', method)
+    SANITIZERS.forEach((method) => {
+      this[method] = (...args): this => {
+        this.sanitizers.push({ method, args })
+        return this
+      }
     })
   }
 
