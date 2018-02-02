@@ -12,7 +12,7 @@ const query = guestlist.guard('query')
   .permit('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
   .permit('date', guestlist.rule().isISO8601().toDate())
 
-app.get('/search', query.secure(), (req, res, next) => { … });
+app.get('/search', guestlist.secure(query), (req, res, next) => { … });
 ```
 
 > If you're not on the list, you're not coming in!
@@ -38,38 +38,50 @@ $ yarn add guestlist
 
 ## Usage
 
-Guestlist exports two methods:-
-
-### `.guard(property)`
-
-Returns a new instance of [`Guard`](#api-guard) for the request property to monitor, one of:-
-
-- `"query"` for query string parameters
-- `"params"` for named route parameters
-- `"body"` for data submitted in the request body (requires body parsing middleware such as [body-parser])
+Guestlist exports three methods:-
 
 ### `.rule()`
 
 Returns a new instance of [`Rule`](#api-rule) on which to declare validators and sanitizers.
 
+### `.guard(property)`
+
+Returns a new instance of [`Guard`](#api-guard) for the request property to monitor, usually one of:-
+
+- `"query"` for query string parameters
+- `"params"` for named route parameters
+- `"body"` for data submitted in the request body
+
+### `.secure(guard)`
+
+Returns a new instance of the [`Secure`](#api-secure) middleware for the given `Guard`.
+
+---
+
+See the `examples/` directory for further help.
+
 ## API
-
-<a name="api-guard"></a>
-### `Guard`
-
-#### `permit(property, rule)`
-
-#### `secure()`
-
-Returns the generated middleware to use.
 
 <a name="api-rule"></a>
 ### `Rule`
 
 The `Rule` class provides a fluent interface over [validator.js]. All validator and sanitizer methods are available and chainable. Validators will always be called before sanitizers and and they will be called in the order in which they were declared.
 
-[body-parser]: https://www.npmjs.org/package/body-parser
 [validator.js]: https://www.npmjs.com/package/validator
+
+<a name="api-guard"></a>
+### `Guard`
+
+The `Guard` class keeps a list of parameters and their rules to monitor. The class has one method:
+
+#### `permit(parameter, rule)`
+
+Declares a parameter to monitor with the given rule.
+
+<a name="api-secure"></a>
+### `Secure`
+
+
 
 ## Development
 

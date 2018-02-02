@@ -3,7 +3,7 @@ const { Rule, Guard } = require('../')
 const fixture = new Rule()
 
 describe('Guard', () => {
-  it('requires a target property to secure', () => {
+  it('requires a target property', () => {
     expect(() => new Guard('body')).not.toThrowError()
     expect(() => new Guard()).toThrowError()
   })
@@ -27,21 +27,6 @@ describe('Guard', () => {
 
       expect(instance.list.has('a')).toEqual(true)
       expect(instance.list.has('b')).toEqual(true)
-    })
-  })
-
-  describe('#secure', () => {
-    let instance
-
-    beforeEach(() => {
-      instance = new Guard('query')
-    })
-
-    it('returns a new middleware function', () => {
-      const result = instance.secure()
-
-      expect(result).toEqual(jasmine.any(Function))
-      expect(result.length).toEqual(3)
     })
   })
 })

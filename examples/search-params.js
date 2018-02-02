@@ -19,7 +19,7 @@ const query = guestlist.guard('query')
   .permit('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
   .permit('date', guestlist.rule().isISO8601().toDate())
 
-app.get('/', query.secure(), (req, res) => {
+app.get('/', guestlist.secure(query), (req, res) => {
   res.json(req.query)
 })
 

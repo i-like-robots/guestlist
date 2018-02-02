@@ -7,6 +7,18 @@ const subject = {
 }
 
 describe('Rule', () => {
+  it('appends validators to list of validators', () => {
+    expect(subject.a.validators.length).toEqual(1)
+    expect(subject.b.validators.length).toEqual(2)
+    expect(subject.c.validators.length).toEqual(2)
+  })
+
+  it('appends sanitizers to list of sanitizers', () => {
+    expect(subject.a.sanitizers.length).toEqual(1)
+    expect(subject.b.sanitizers.length).toEqual(2)
+    expect(subject.c.sanitizers.length).toEqual(1)
+  })
+
   describe('#validate', () => {
     it('checks a value against the given rules', () => {
       expect(Rule.validate(subject.a, '1')).toEqual(true)

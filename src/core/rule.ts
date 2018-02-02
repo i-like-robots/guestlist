@@ -116,4 +116,4 @@ export class Rule {
   }
 }
 
-export default () => new Rule()
+export default (): Rule => new Rule()

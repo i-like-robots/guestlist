@@ -1,18 +1,16 @@
 import { Rule } from './rule'
-import security from './security'
-
-export type GuardTarget = 'query' | 'params' | 'body'
 
 export class Guard {
-  public target: GuardTarget
+  public property: string
+
   private list: Map<string, Rule>
 
-  constructor (target: GuardTarget) {
-    if (typeof target !== 'string') {
-      throw new TypeError('`target` must be a string')
+  constructor (property: string) {
+    if (typeof property !== 'string') {
+      throw new TypeError('`property` must be a string')
     }
 
-    this.target = target
+    this.property = property
     this.list = new Map()
   }
 
@@ -29,10 +27,6 @@ export class Guard {
 
     return this
   }
-
-  secure () {
-    return security.bind(this)
-  }
 }
 
-export default (target: GuardTarget) => new Guard(target)
+export default (target: string): Guard => new Guard(target)
