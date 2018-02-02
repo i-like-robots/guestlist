@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from '../../node_modules/@types/express/index'
 import { Rule } from './rule'
 
-export default function patrol (request: Request, response: Response, next: NextFunction): void {
+export default function (request: Request, response: Response, next: NextFunction): void {
   const whitelist = {}
   const parameters = request[this.property] || {}
 

@@ -2,9 +2,8 @@
   "name": "guestlist",
   "version": "0.0.1",
   "description": "Whitelists, validates and sanitizes all of your request parameters.",
-  "main": "dist-cjs/index.js",
-  "module": "dist-es6/index.js",
-  "types": "typings/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "validator": "^9.4.0"
   },
@@ -22,18 +21,14 @@
   },
   "scripts": {
     "coverage": "nyc npm test",
-    "pretest": "npm run lint && npm run build:cjs",
+    "pretest": "npm run lint && npm run build",
     "test": "jasmine spec/*.spec.js",
     "lint": "tslint -c tslint.json src/**/*.ts spec/*.js",
-    "build": "npm run build:cjs && npm run build:es6",
-    "build:cjs": "tsc --outDir dist-cjs --module commonjs",
-    "build:es6": "tsc --outDir dist-es6 --module es2015",
+    "build": "tsc",
     "prepublish": "npm run build"
   },
   "files": [
-    "dist-cjs",
-    "dist-es6",
-    "typings",
+    "dist",
     "examples",
     "README.md"
   ],

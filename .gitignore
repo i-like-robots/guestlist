@@ -1,11 +1,8 @@
 node_modules/
-dist-cjs/
-dist-es6/
-typings/
+dist/
 
 .vscode/
 .nyc_output/
-.rpt2_cache/
 
 .DS_Store
 Thumbs.db

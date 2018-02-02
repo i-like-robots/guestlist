@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "target": "es2015",
+    "module": "commonjs",
     // "strict": true,
     "declaration": true,
-    "declarationDir": "./typings",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "rootDir": "./src",
+    "outDir": "./dist"
   }
 }
