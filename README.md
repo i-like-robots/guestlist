@@ -15,6 +15,8 @@ const query = guestlist.guard('query')
 app.get('/search', guestlist.secure(query), (req, res, next) => { … });
 ```
 
+Any parameters that are not expected, and do not follow the rules will be ejected. In other words:
+
 > If you're not on the list, you're not coming in!
 
 ## Installation
