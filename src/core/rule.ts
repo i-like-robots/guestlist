@@ -1,6 +1,6 @@
 import validator from 'validator'
 
-const VALIDATORS = [
+const VALIDATORS = new Set([
   'contains',
   'equals',
   'isAfter',
@@ -54,9 +54,9 @@ const VALIDATORS = [
   'isVariableWidth',
   'isWhitelisted',
   'matches'
-]
+])
 
-const SANITIZERS = [
+const SANITIZERS = new Set([
   'blacklist',
   'escape',
   'ltrim',
@@ -71,7 +71,7 @@ const SANITIZERS = [
   'trim',
   'unescape',
   'whitelist'
-]
+])
 
 export class Rule {
   public validators: Array<{ method: string, args: Array<any> }>
@@ -81,33 +81,27 @@ export class Rule {
     this.validators = []
     this.sanitizers = []
 
-    VALIDATORS.forEach((method) => {
-      this[method] = (...args): this => {
-        this.validators.push({ method, args })
-        return this
-      }
-    })
+    const methods = Object.keys(validator)
 
-    SANITIZERS.forEach((method) => {
+    for (const method of methods) {
       this[method] = (...args): this => {
-        this.sanitizers.push({ method, args })
+        if (VALIDATORS.has(method)) {
+          this.validators.push({ method, args })
+        }
+
+        if (SANITIZERS.has(method)) {
+          this.sanitizers.push({ method, args })
+        }
+
         return this
       }
-    })
+    }
   }
 
   static validate (instance: Rule, value: any): Boolean {
-    let valid = true
-
-    for (const { method, args } of instance.validators) {
-      valid = Reflect.apply(validator[method], null, [ value, ...args ])
-
-      if (!valid) {
-        break
-      }
-    }
-
-    return valid
+    return instance.validators.every(({ method, args }) => {
+      return Reflect.apply(validator[method], null, [ value, ...args ])
+    })
   }
 
   static sanitize (instance: Rule, value: any): any {
