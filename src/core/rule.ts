@@ -73,40 +73,39 @@ const SANITIZERS = new Set([
   'whitelist'
 ])
 
+export type Criteria = Array<{ method: Function, args: Array<any> }>
+
 export class Rule {
-  public validators: Array<{ method: string, args: Array<any> }>
-  public sanitizers: Array<{ method: string, args: Array<any> }>
+  public validators: Criteria = []
+  public sanitizers: Criteria = []
 
   constructor () {
-    this.validators = []
-    this.sanitizers = []
+    Object.entries(validator).forEach(([ name, method ]) => {
+      if (typeof method === 'function') {
+        this[name] = (...args): this => {
+          if (VALIDATORS.has(name)) {
+            this.validators.push({ method, args })
+          }
 
-    const methods = Object.keys(validator)
+          if (SANITIZERS.has(name)) {
+            this.sanitizers.push({ method, args })
+          }
 
-    for (const method of methods) {
-      this[method] = (...args): this => {
-        if (VALIDATORS.has(method)) {
-          this.validators.push({ method, args })
+          return this
         }
-
-        if (SANITIZERS.has(method)) {
-          this.sanitizers.push({ method, args })
-        }
-
-        return this
       }
-    }
-  }
-
-  static validate (instance: Rule, value: any): Boolean {
-    return instance.validators.every(({ method, args }) => {
-      return Reflect.apply(validator[method], null, [ value, ...args ])
     })
   }
 
-  static sanitize (instance: Rule, value: any): any {
+  static validate (instance: Rule, value: string): Boolean {
+    return instance.validators.every(({ method, args }) => {
+      return Reflect.apply(method, null, [ value, ...args ])
+    })
+  }
+
+  static sanitize (instance: Rule, value: string): any {
     return instance.sanitizers.reduce((value, { method, args }) => (
-      Reflect.apply(validator[method], null, [ value, ...args ])
+      Reflect.apply(method, null, [ value, ...args ])
     ), value)
   }
 }

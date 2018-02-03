@@ -2,7 +2,7 @@ import { Rule } from './rule'
 
 export class Guard {
   public property: string
-  public list: Map<string, Rule>
+  public list: Map<string, Rule> = new Map()
 
   constructor (property: string) {
     if (typeof property !== 'string') {
@@ -10,7 +10,6 @@ export class Guard {
     }
 
     this.property = property
-    this.list = new Map()
   }
 
   permit (parameter: string, rule: Rule): this {
