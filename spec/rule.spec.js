@@ -20,7 +20,7 @@ describe('Rule', () => {
   })
 
   describe('#validate', () => {
-    it('checks a value against the given rules', () => {
+    it('checks a value against each validator', () => {
       expect(Rule.validate(subject.a, '1')).toEqual(true)
       expect(Rule.validate(subject.a, 'abc')).toEqual(false)
       expect(Rule.validate(subject.a, '101')).toEqual(false)
