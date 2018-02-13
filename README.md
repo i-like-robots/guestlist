@@ -11,6 +11,7 @@ const query = guestlist.guard('query')
   .permit('term', guestlist.rule().isLength({ min: 2 }).trim().escape())
   .permit('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
   .permit('date', guestlist.rule().isISO8601().toDate())
+  .permit('tag', guestlist.rule().isUUID(), { multiple: true })
 
 app.get('/search', guestlist.secure(query), (req, res, next) => { … });
 ```
@@ -76,9 +77,11 @@ The `Rule` class provides a fluent interface over [validator.js]. All validator 
 
 The `Guard` class keeps a list of parameters and their rules to monitor. The class has one method:
 
-#### `permit(parameter, rule)`
+#### `permit(parameter, rule[, options])`
 
-Declares a parameter to monitor with the given rule.
+Adds a parameter to the permitted list with the given rule. Options are:-
+
+- `multiple` whether or not to allow multiple parameters, default `false`
 
 <a name="api-secure"></a>
 ### `Secure`
