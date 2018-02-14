@@ -11,7 +11,7 @@ const query = guestlist.guard('query')
   .permit('term', guestlist.rule().isLength({ min: 2 }).trim().escape())
   .permit('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
   .permit('date', guestlist.rule().isISO8601().toDate())
-  .permit('tag', guestlist.rule().isUUID(), { multiple: true })
+  .permit('tags', guestlist.rule().isInt().toInt(), { multiple: true })
 
 app.get('/search', guestlist.secure(query), (req, res, next) => { … });
 ```
@@ -43,10 +43,6 @@ $ yarn add guestlist
 
 Guestlist exports three methods:-
 
-### `.rule()`
-
-Returns a new instance of [`Rule`](#api-rule) on which to declare validators and sanitizers.
-
 ### `.guard(property)`
 
 Returns a new instance of [`Guard`](#api-guard) for the request property to monitor, usually one of:-
@@ -54,6 +50,10 @@ Returns a new instance of [`Guard`](#api-guard) for the request property to moni
 - `"query"` for query string parameters
 - `"params"` for named route parameters
 - `"body"` for data submitted in the request body
+
+### `.rule()`
+
+Returns a new instance of [`Rule`](#api-rule) on which to declare validator and sanitizer criteria.
 
 ### `.secure(guard)`
 
@@ -65,23 +65,23 @@ See the `examples/` directory for further help.
 
 ## API
 
+<a name="api-guard"></a>
+### `Guard`
+
+The `Guard` class maintains a list of parameters and their rules to follow. The class has one method:
+
+#### `permit(parameter, rule[, options])`
+
+Adds a parameter to the permitted list with the given rule. The current options are:-
+
+- `multiple` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
+
 <a name="api-rule"></a>
 ### `Rule`
 
 The `Rule` class provides a fluent interface over [validator.js]. All validator and sanitizer methods are available and chainable. Validators will always be called before sanitizers and and they will be called in the order in which they were declared.
 
 [validator.js]: https://www.npmjs.com/package/validator
-
-<a name="api-guard"></a>
-### `Guard`
-
-The `Guard` class keeps a list of parameters and their rules to monitor. The class has one method:
-
-#### `permit(parameter, rule[, options])`
-
-Adds a parameter to the permitted list with the given rule. Options are:-
-
-- `multiple` whether or not to allow multiple parameters, default `false`
 
 <a name="api-secure"></a>
 ### `Secure`
