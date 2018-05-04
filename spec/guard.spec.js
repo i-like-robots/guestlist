@@ -3,30 +3,82 @@ const { Rule, Guard } = require('../')
 const fixture = new Rule()
 
 describe('Guard', () => {
-  it('requires a target property', () => {
-    expect(() => new Guard('body')).not.toThrowError()
-    expect(() => new Guard()).toThrowError()
+  let instance
+
+  beforeEach(() => {
+    instance = new Guard()
   })
 
   describe('#permit', () => {
-    let instance
 
-    beforeEach(() => {
-      instance = new Guard('query')
+    it('requires a valid location, parameter, and a rule', () => {
+      expect(() => instance.permit('body', 'param', fixture)).not.toThrowError()
+      expect(() => instance.permit('body', null, fixture)).toThrowError()
+      expect(() => instance.permit(null, 'param', fixture)).toThrowError()
     })
 
-    it('requires a parameter and a rule', () => {
-      expect(() => instance.permit('param', fixture)).not.toThrowError()
-      expect(() => instance.permit('param')).toThrowError()
-      expect(() => instance.permit(null, fixture)).toThrowError()
+    it('appends valid members to the list', () => {
+      instance.permit('body', 'foo', fixture)
+      instance.permit('body', 'bar', fixture)
+
+      expect(instance.list.length).toEqual(2)
+
+      instance.list.forEach((item) => {
+        const keys = Object.keys(item)
+
+        expect(keys).toContain('location')
+        expect(keys).toContain('property')
+        expect(keys).toContain('rule')
+        expect(keys).toContain('options')
+      })
     })
+  })
 
-    it('appends each rule to the list', () => {
-      instance.permit('a', fixture)
-      instance.permit('b', fixture)
+  describe('#body', () => {
+    it('appends a member to the list checking the body location', () => {
+      instance.body('foo', fixture)
 
-      expect(instance.list.has('a')).toEqual(true)
-      expect(instance.list.has('b')).toEqual(true)
+      const result = instance.list.find(({ location, property }) => {
+        return location === 'body' && property === 'foo'
+      })
+
+      expect(result).toBeTruthy()
+    })
+  })
+
+  describe('#cookie', () => {
+    it('appends a member to the list checking the cookies location', () => {
+      instance.cookie('bar', fixture)
+
+      const result = instance.list.find(({ location, property }) => {
+        return location === 'cookies' && property === 'bar'
+      })
+
+      expect(result).toBeTruthy()
+    })
+  })
+
+  describe('#param', () => {
+    it('appends a member to the list checking the params location', () => {
+      instance.param('baz', fixture)
+
+      const result = instance.list.find(({ location, property }) => {
+        return location === 'params' && property === 'baz'
+      })
+
+      expect(result).toBeTruthy()
+    })
+  })
+
+  describe('#query', () => {
+    it('appends a member to the list checking the query location', () => {
+      instance.query('qux', fixture)
+
+      const result = instance.list.find(({ location, property }) => {
+        return location === 'query' && property === 'qux'
+      })
+
+      expect(result).toBeTruthy()
     })
   })
 })

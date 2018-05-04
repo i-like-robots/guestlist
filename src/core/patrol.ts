@@ -3,38 +3,34 @@ import { Guard } from './guard'
 import { Rule } from './rule'
 import { single, multiple } from './util'
 
-const INVALID = Symbol('INVALID')
-
-// If the
 const test = (value: string, rule: Rule) => (
-  Rule.validate(rule, value) ? Rule.sanitize(rule, value) : INVALID
+  Rule.validate(rule, value) ? Rule.sanitize(rule, value) : undefined
 )
 
 export default function (this: Guard, request: Request, response: Response, next: NextFunction): void {
   const whitelist = {}
-  const parameters = request[this.property] || {}
 
-  for (const [ parameter, { rule, options } ] of this.list) {
-    if (parameters.hasOwnProperty(parameter)) {
-      const raw = parameters[parameter]
+  for (const { location, property, rule, options } of this.list) {
+    if (request[location] && request[location].hasOwnProperty(property)) {
+      const raw = request[location][property]
+
+      whitelist[location] = whitelist[location] || {}
 
       if (options.multiple) {
         const values = multiple(raw)
         const results = values.map((value) => test(value, rule))
 
-        whitelist[parameter] = results.filter((result) => result !== INVALID)
+        whitelist[location][property] = results.filter((result) => result !== undefined)
       } else {
         const value = single(raw)
         const result = test(value, rule)
 
-        if (result !== INVALID) {
-          whitelist[parameter] = result
-        }
+        whitelist[location][property] = result
       }
     }
   }
 
-  request[this.property] = whitelist
+  Object.assign(request, whitelist)
 
   next()
 }

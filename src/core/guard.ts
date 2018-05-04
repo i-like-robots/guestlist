@@ -1,38 +1,61 @@
 import { Rule } from './rule'
 
-export type ListMember = { rule: Rule, options: MemberOptions }
+export type Member = {
+  location: string,
+  property: string,
+  rule: Rule,
+  options: Options
+}
 
-export interface MemberOptions { multiple?: boolean }
+export interface Options {
+  multiple?: boolean
+}
 
-const DEFAULT_OPTIONS: MemberOptions = {
+const DEFAULTS: Options = {
   multiple: false
 }
 
 export class Guard {
-  public property: string
-  public list: Map<string, ListMember> = new Map()
+  public list: Array<Member> = []
 
-  constructor (property: string) {
-    if (typeof property !== 'string') {
-      throw new TypeError('`property` must be a string')
+  permit (location: string, property: string, rule: Rule, options: Options): this {
+    if (typeof location !== 'string') {
+      throw new TypeError('`location` must be a "string"')
     }
 
-    this.property = property
-  }
-
-  permit (parameter: string, rule: Rule, options: MemberOptions = {}): this {
-    if (typeof parameter !== 'string') {
-      throw new TypeError('`parameter` must be a "string"')
+    if (typeof property !== 'string') {
+      throw new TypeError('`property` must be a "string"')
     }
 
     if (rule instanceof Rule === false) {
       throw new TypeError('`rule` must be an instance of Rule')
     }
 
-    this.list.set(parameter, { rule, options: Object.assign({}, DEFAULT_OPTIONS, options) })
+    this.list.push({
+      location,
+      property,
+      rule,
+      options: Object.assign({}, DEFAULTS, options)
+    })
 
     return this
   }
+
+  body (property: string, rule: Rule, options: Options): this {
+    return this.permit('body', property, rule, options)
+  }
+
+  cookie (property: string, rule: Rule, options: Options): this {
+    return this.permit('cookies', property, rule, options)
+  }
+
+  param (property: string, rule: Rule, options: Options): this {
+    return this.permit('params', property, rule, options)
+  }
+
+  query (property: string, rule: Rule, options: Options): this {
+    return this.permit('query', property, rule, options)
+  }
 }
 
-export default (target: string): Guard => new Guard(target)
+export default (target: string): Guard => new Guard()

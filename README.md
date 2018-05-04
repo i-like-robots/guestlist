@@ -7,13 +7,15 @@ Whitelists, validates and sanitizes all of your request parameters. Compatible w
 ```js
 const guestlist = require('guestlist')
 
-const query = guestlist.guard('query')
-  .permit('term', guestlist.rule().isLength({ min: 2 }).trim().escape())
-  .permit('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
-  .permit('date', guestlist.rule().isISO8601().toDate())
-  .permit('tags', guestlist.rule().isInt().toInt(), { multiple: true })
+// Create a new guard monitoring query string parameters
+const guard = guestlist.guard('query')
+  .query('term', guestlist.rule().isLength({ min: 2 }).trim().escape())
+  .query('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
+  .query('date', guestlist.rule().isISO8601().toDate())
+  .query('tags', guestlist.rule().isInt().toInt(), { multiple: true })
 
-app.get('/search', guestlist.secure(query), (req, res, next) => { … });
+// Apply secure middleware to the application route
+app.get('/search', guestlist.secure(guard), (req, res, next) => { … });
 ```
 
 Any parameters that are not expected or do not follow the rules will be ejected. In other words:
@@ -43,13 +45,9 @@ $ yarn add guestlist
 
 Guestlist exports three methods:-
 
-### `.guard(property)`
+### `.guard()`
 
-Returns a new instance of [`Guard`](#api-guard) for the request property to monitor, usually one of:-
-
-- `"query"` for query string parameters
-- `"params"` for named route parameters
-- `"body"` for data submitted in the request body
+Returns a new instance of [`Guard`](#api-guard) on which to add locations (`req.body`, `req.cookies`, `req.params`, or `req.query`) and properties to check.
 
 ### `.rule()`
 
@@ -68,11 +66,17 @@ See the `examples/` directory for further help.
 <a name="api-guard"></a>
 ### `Guard`
 
-The `Guard` class maintains a list of parameters and their rules to follow. The class has one method:
+The `Guard` class maintains a list of locations and properties to check and the rules to follow. It provides a method for each of the supported locations:
 
-#### `permit(parameter, rule[, options])`
+#### `body(property, rule[, options])`
 
-Adds a parameter to the permitted list with the given rule. The current options are:-
+#### `cookie(property, rule[, options])`
+
+#### `param(property, rule[, options])`
+
+#### `query(property, rule[, options])`
+
+The currently supported options are:-
 
 - `multiple` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
 
