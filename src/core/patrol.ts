@@ -1,12 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Guard } from './guard'
 import { Rule } from './rule'
-
-// If the value is an array when it shouldn't be, take the last result
-const single = (value): string => Array.isArray(value) ? value.slice(-1).pop() : value
-
-// If the parameter is not an array when it should be, array-ify it
-const multiple = (value): Array<string> => [].concat(value)
+import { single, multiple } from './util'
 
 // If the
 const test = (value: string, rule: Rule) => (
