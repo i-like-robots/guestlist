@@ -3,9 +3,11 @@ import { Guard } from './guard'
 import { Rule } from './rule'
 import { single, multiple } from './util'
 
+const INVALID = Symbol('INVALID')
+
 // If the
 const test = (value: string, rule: Rule) => (
-  Rule.validate(rule, value) ? Rule.sanitize(rule, value) : undefined
+  Rule.validate(rule, value) ? Rule.sanitize(rule, value) : INVALID
 )
 
 export default function (this: Guard, request: Request, response: Response, next: NextFunction): void {
@@ -13,22 +15,22 @@ export default function (this: Guard, request: Request, response: Response, next
   const parameters = request[this.property] || {}
 
   for (const [ parameter, { rule, options } ] of this.list) {
-    const raw = parameters.hasOwnProperty(parameter) ? parameters[parameter] : null
+    if (parameters.hasOwnProperty(parameter)) {
+      const raw = parameters[parameter]
 
-    if (raw === null) {
-      continue
-    }
+      if (options.multiple) {
+        const values = multiple(raw)
+        const results = values.map((value) => test(value, rule))
 
-    if (options.multiple) {
-      const values = multiple(raw)
-      const results = values.map((value) => test(value, rule))
+        whitelist[parameter] = results.filter((result) => result !== INVALID)
+      } else {
+        const value = single(raw)
+        const result = test(value, rule)
 
-      whitelist[parameter] = results.filter((result) => result !== undefined)
-    } else {
-      const value = single(raw)
-      const result = test(value, rule)
-
-      whitelist[parameter] = result
+        if (result !== INVALID) {
+          whitelist[parameter] = result
+        }
+      }
     }
   }
 
