@@ -4,6 +4,8 @@
     "tslint-config-standard"
   ],
   "jsRules": {},
-  "rules": {},
+  "rules": {
+    "strict-type-predicates": false
+  },
   "rulesDirectory": []
 }

@@ -16,7 +16,7 @@
     "jasmine": "^3.1.0",
     "node-mocks-http": "^1.6.6",
     "nyc": "^11.7.0",
-    "tslint": "^5.9.1",
+    "tslint": "^5.10.0",
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.8.0"
   },
@@ -24,7 +24,7 @@
     "coverage": "nyc npm test",
     "pretest": "npm run lint && npm run build",
     "test": "jasmine spec/*.spec.js",
-    "lint": "tslint -c tslint.json src/**/*.ts spec/*.js",
+    "lint": "tslint -p tsconfig.json src/**/*.ts",
     "build": "tsc",
     "prepublish": "npm run build"
   },
