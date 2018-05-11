@@ -10,7 +10,6 @@ describe('Guard', () => {
   })
 
   describe('#permit', () => {
-
     it('requires a valid location, parameter, and a rule', () => {
       expect(() => instance.permit('body', 'param', fixture)).not.toThrowError()
       expect(() => instance.permit('body', null, fixture)).toThrowError()

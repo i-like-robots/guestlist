@@ -2,7 +2,7 @@ import { Guard } from './guard'
 import patrol from './patrol'
 
 export class Secure {
-  constructor (guard: Guard) {
+  constructor(guard) {
     if (guard instanceof Guard === false) {
       throw new TypeError('`guard` must be an instance of Guard')
     }
@@ -11,4 +11,4 @@ export class Secure {
   }
 }
 
-export default (guard: Guard): Secure => new Secure(guard)
+export default (guard) => new Secure(guard)

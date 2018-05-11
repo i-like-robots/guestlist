@@ -2,8 +2,9 @@
   "name": "guestlist",
   "version": "0.1.0-beta.5",
   "description": "Whitelists, validates and sanitizes all of your request parameters.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "types/index.d.ts",
   "dependencies": {
     "validator": "^9.4.0"
   },
@@ -16,20 +17,21 @@
     "jasmine": "^3.1.0",
     "node-mocks-http": "^1.6.6",
     "nyc": "^11.7.0",
-    "tslint": "^5.10.0",
-    "tslint-config-standard": "^7.0.0",
-    "typescript": "^2.8.0"
+    "prettier": "^1.12.1",
+    "rollup": "^0.58.2"
   },
   "scripts": {
     "coverage": "nyc npm test",
-    "pretest": "npm run lint && npm run build",
-    "test": "jasmine spec/*.spec.js",
-    "lint": "tslint -p tsconfig.json src/**/*.ts",
-    "build": "tsc",
-    "prepublish": "npm run build"
+    "prepare": "npm run build",
+    "pretest": "npm run build",
+    "test": "npm run lint && npm run spec",
+    "spec": "jasmine spec/*.spec.js",
+    "lint": "prettier --config .prettierrc.json --list-different src/*.js",
+    "build": "rollup -c rollup.config.js"
   },
   "files": [
     "dist",
+    "types",
     "examples",
     "README.md"
   ],
@@ -49,5 +51,5 @@
   },
   "homepage": "https://github.com/i-like-robots/guestlist",
   "author": "Matt Hinchliffe",
-  "license": "ISC"
+  "license": "MIT"
 }
