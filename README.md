@@ -55,7 +55,9 @@ Returns a new instance of [`Rule`](#api-rule) on which to declare validator and 
 
 ---
 
-See the `examples/` directory for further help.
+See the [`examples/`][examples] directory for further usage help.
+
+[examples]: https://github.com/i-like-robots/guestlist/tree/master/examples
 
 ## API
 
