@@ -73,37 +73,41 @@ const SANITIZERS = new Set([
   'whitelist'
 ])
 
-export type Criteria = Array<{ method: Function, args: Array<any> }>
-
 export class Rule {
-  public validators: Criteria = []
-  public sanitizers: Criteria = []
-
-  static validate (instance: Rule, value: string): Boolean {
-    return instance.validators.every(({ method, args }) => (
-      Reflect.apply(method, null, [ value, ...args ])
-    ))
+  constructor() {
+    this.validators = []
+    this.sanitizers = []
   }
 
-  static sanitize (instance: Rule, value: string): any {
-    return instance.sanitizers.reduce((value, { method, args }) => (
-      Reflect.apply(method, null, [ value, ...args ])
-    ), value)
+  static validate(instance, value) {
+    return instance.validators.every(({ method, args }) =>
+      Reflect.apply(validator[method], null, [value, ...args])
+    )
+  }
+
+  static sanitize(instance, value) {
+    return instance.sanitizers.reduce((value, { method, args }) => {
+      return Reflect.apply(validator[method], null, [value, ...args])
+    }, value)
   }
 }
 
-// Add every Validator method to the Rule prototype
-// NOTE: No Object.entries() in Node v6
-Object.keys(validator).forEach((name) => {
-  const method = validator[name]
-  const type = VALIDATORS.has(name) && 'validators' || SANITIZERS.has(name) && 'sanitizers'
-
-  if (type && typeof method === 'function') {
-    Rule.prototype[name] = function (...args) {
-      this[type].push({ method, args })
+for (const method of VALIDATORS) {
+  if (validator.hasOwnProperty(method)) {
+    Rule.prototype[method] = function(...args) {
+      this.validators.push({ method, args })
       return this
     }
   }
-})
+}
 
-export default (): Rule => new Rule()
+for (const method of SANITIZERS) {
+  if (validator.hasOwnProperty(method)) {
+    Rule.prototype[method] = function(...args) {
+      this.sanitizers.push({ method, args })
+      return this
+    }
+  }
+}
+
+export default () => new Rule()

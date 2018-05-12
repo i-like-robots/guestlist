@@ -1,13 +1,13 @@
-const { Rule, Guard, Secure } = require('../')
+const { Rule, Guard } = require('../')
 const { createMocks } = require('node-mocks-http')
 
-const fixture = new Guard('query')
-  .permit('term', new Rule().isLength({ min: 2 }).trim().escape())
-  .permit('page', new Rule().isInt({ min: 1, max: 100 }).toInt())
-  .permit('date', new Rule().isISO8601().toDate())
-  .permit('tags', new Rule().isInt().toInt(), { multiple: true })
+const fixture = new Guard()
+  .query('term', new Rule().isLength({ min: 2 }).trim().escape())
+  .query('page', new Rule().isInt({ min: 1, max: 100 }).toInt())
+  .query('date', new Rule().isISO8601().toDate())
+  .query('tags', new Rule().isInt().toInt(), { multiple: true })
 
-const subject = new Secure(fixture)
+const subject = fixture.secure()
 
 const run = (query = {}) => {
   const { req, res } = createMocks({ query })
