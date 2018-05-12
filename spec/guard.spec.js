@@ -80,4 +80,13 @@ describe('Guard', () => {
       expect(result).toBeTruthy()
     })
   })
+
+  describe('#secure', () => {
+    it('returns a new middleware function', () => {
+      const result = instance.secure()
+
+      expect(result).toEqual(jasmine.any(Function))
+      expect(result.length).toEqual(3)
+    })
+  })
 })

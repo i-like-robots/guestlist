@@ -1,4 +1,4 @@
-const { Rule, Guard, Secure } = require('../')
+const { Rule, Guard } = require('../')
 const { createMocks } = require('node-mocks-http')
 
 const fixture = new Guard()
@@ -7,7 +7,7 @@ const fixture = new Guard()
   .query('date', new Rule().isISO8601().toDate())
   .query('tags', new Rule().isInt().toInt(), { multiple: true })
 
-const subject = new Secure(fixture)
+const subject = fixture.secure()
 
 const run = (query = {}) => {
   const { req, res } = createMocks({ query })

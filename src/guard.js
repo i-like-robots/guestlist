@@ -1,4 +1,5 @@
 import { Rule } from './rule'
+import patrol from './patrol'
 import { extend } from './util'
 
 const DEFAULTS = {
@@ -47,6 +48,10 @@ export class Guard {
 
   query(property, rule, options) {
     return this.permit('query', property, rule, options)
+  }
+
+  secure() {
+    return patrol.bind(this)
   }
 }
 

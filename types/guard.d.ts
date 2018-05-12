@@ -1,4 +1,5 @@
 import { Rule } from './rule'
+import patrol from './patrol'
 
 export declare type Member = {
   location: string
@@ -23,6 +24,8 @@ export declare class Guard {
   param(property: string, rule: Rule, options: Options): this
 
   query(property: string, rule: Rule, options: Options): this
+
+  secure(): patrol
 }
 
 declare const guard: (target: string) => Guard

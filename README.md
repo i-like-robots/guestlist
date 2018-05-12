@@ -15,7 +15,7 @@ const queryGuard = guestlist.guard()
   .query('tags', guestlist.rule().isInt().toInt(), { multiple: true })
 
 // Apply guard as middleware to the route to secure
-app.get('/search', guestlist.secure(queryGuard), (req, res, next) => { … })
+app.get('/search', queryGuard.secure(), (req, res, next) => { … })
 ```
 
 With the middleware checking your route any request properties that are not expected or do not follow the rules will be ejected. In other words:
@@ -53,10 +53,6 @@ Returns a new instance of [`Guard`](#api-guard) on which to add locations (`req.
 
 Returns a new instance of [`Rule`](#api-rule) on which to declare validator and sanitizer criteria.
 
-### `.secure(guard)`
-
-Returns a new instance of the [`Secure`](#api-secure) middleware for the given `Guard`.
-
 ---
 
 See the `examples/` directory for further help.
@@ -66,7 +62,7 @@ See the `examples/` directory for further help.
 <a name="api-guard"></a>
 ### `Guard`
 
-The `Guard` class maintains a list of locations and properties to check and the rules each property must follow. This class also generates middleware to secure a route.
+The `Guard` class maintains a list of locations and properties to check and the rules each property must follow. This class also generates the middleware used to secure a route.
 
 ### `body(property, rule[, options])`
 
@@ -83,6 +79,10 @@ Checks a property with the given rule in `req.params`.
 ### `query(property, rule[, options])`
 
 Checks a property with the given rule in `req.query`.
+
+### `secure()`
+
+Returns a new instance of the [`Secure`](#api-secure) middleware for the guard.
 
 ### Options
 
@@ -104,7 +104,7 @@ Nothing here yet…
 
 ## Development
 
-Guestlist is written [TypeScript] and follows JavaScript [Standard] style and is tested with [Jasmine]
+Guestlist follows the [Standard] code style, includes [TypeScript] declarations and is tested with [Jasmine].
 
 [TypeScript]: https://www.typescriptlang.org/
 [Standard]: https://standardjs.com/

@@ -1,4 +1,3 @@
-import { Guard } from './guard'
 import { Rule } from './rule'
 import { single, multiple, extend, get } from './util'
 
