@@ -43,7 +43,7 @@ $ yarn add guestlist
 
 ## Usage
 
-Guestlist exports three methods:-
+Guestlist exports two methods:-
 
 ### `.guard()`
 
@@ -52,8 +52,6 @@ Returns a new instance of [`Guard`](#api-guard) on which to add locations (`req.
 ### `.rule()`
 
 Returns a new instance of [`Rule`](#api-rule) on which to declare validator and sanitizer criteria.
-
----
 
 See the [`examples/`][examples] directory for further usage help.
 
@@ -66,31 +64,32 @@ See the [`examples/`][examples] directory for further usage help.
 
 The `Guard` class maintains a list of locations and properties to check and the rules each property must follow. This class also generates the middleware used to secure a route.
 
-### `body(property, rule[, options])`
+### `.body(property, rule[, options])`
 
 Checks a property with the given rule in `req.body`.
 
-### `cookie(property, rule[, options])`
+### `.cookie(property, rule[, options])`
 
 Checks a property with the given rule in `req.cookies`.
 
-### `param(property, rule[, options])`
+### `.param(property, rule[, options])`
 
 Checks a property with the given rule in `req.params`.
 
-### `query(property, rule[, options])`
+### `.query(property, rule[, options])`
 
 Checks a property with the given rule in `req.query`.
 
-### `secure()`
+### `.secure()`
 
 Returns a new instance of the [`Secure`](#api-secure) middleware for the guard.
 
 ### Options
 
-Each method accepts a map of options as the final argument  currently supported options are:-
+Each of the Guard methods accepts a set of options as the final argument. The currently supported options are:-
 
 - `multiple` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
+- `default` Set a default value for properties which are undefined or invalid
 
 <a name="api-rule"></a>
 ### `Rule`
@@ -101,8 +100,6 @@ The `Rule` class provides a fluent interface over [validator.js]. All validator 
 
 <a name="api-secure"></a>
 ### `Secure`
-
-Nothing here yet…
 
 ## Development
 
