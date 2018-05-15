@@ -3,7 +3,8 @@ import patrol from './patrol'
 import { extend } from './util'
 
 const DEFAULTS = {
-  multiple: false
+  multiple: false,
+  default: undefined
 }
 
 export class Guard {

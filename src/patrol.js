@@ -7,6 +7,8 @@ const test = (value, rule) => {
   }
 }
 
+const notEmpty = (value) => value !== undefined
+
 function patrol(request, response, next) {
   const whitelist = {}
 
@@ -17,15 +19,19 @@ function patrol(request, response, next) {
       whitelist[location] = {}
     }
 
+    let result
+
     if (value !== undefined) {
       if (options.multiple) {
-        const results = multiple(value).map((item) => test(item, rule))
-        whitelist[location][property] = results.filter((result) => result !== undefined)
+        const subjects = multiple(value)
+        result = subjects.map((subject) => test(subject, rule)).filter(notEmpty)
       } else {
-        const result = test(single(value), rule)
-        whitelist[location][property] = result
+        const subject = single(value)
+        result = test(subject, rule)
       }
     }
+
+    whitelist[location][property] = notEmpty(result) ? result : options.default
   }
 
   extend(request, whitelist)

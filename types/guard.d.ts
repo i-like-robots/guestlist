@@ -10,6 +10,7 @@ export declare type Member = {
 
 export interface Options {
   multiple?: boolean
+  default?: any
 }
 
 export declare class Guard {
