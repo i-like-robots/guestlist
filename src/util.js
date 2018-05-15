@@ -6,6 +6,10 @@ export function multiple(value) {
   return [].concat(value)
 }
 
+export function notEmpty(value) {
+  return value != null
+}
+
 export function extend(target, ...items) {
   const len = items.length
 

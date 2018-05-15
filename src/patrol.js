@@ -1,13 +1,11 @@
 import { Rule } from './rule'
-import { single, multiple, extend, get } from './util'
+import { single, multiple, notEmpty, extend, get } from './util'
 
 const test = (value, rule) => {
   if (Rule.validate(rule, value)) {
     return Rule.sanitize(rule, value)
   }
 }
-
-const notEmpty = (value) => value !== undefined
 
 function patrol(request, response, next) {
   const whitelist = {}
