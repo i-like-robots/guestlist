@@ -10,9 +10,9 @@ const guestlist = require('guestlist')
 // Create a new guard to check query string properties
 const queryGuard = guestlist.guard()
   .query('term', guestlist.rule().isLength({ min: 2 }).trim().escape())
-  .query('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
+  .query('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
   .query('date', guestlist.rule().isISO8601().toDate())
-  .query('tags', guestlist.rule().isInt().toInt(), { multiple: true })
+  .query('tags', guestlist.rule().isInt().toInt(), { array: true })
 
 // Apply guard as middleware to the route to secure
 app.get('/search', queryGuard.secure(), (req, res, next) => { … })
@@ -88,7 +88,7 @@ Returns a new instance of the [`Secure`](#api-secure) middleware for the guard.
 
 Each of the Guard methods accepts a set of options as the final argument. The currently supported options are:-
 
-- `multiple` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
+- `array` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
 - `default` Set a default value for properties which are undefined or invalid
 
 <a name="api-rule"></a>

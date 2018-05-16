@@ -5,7 +5,7 @@ const fixture = new Guard()
   .query('term', new Rule().isLength({ min: 2 }).trim().escape())
   .query('page', new Rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
   .query('date', new Rule().isISO8601().toDate())
-  .query('tags', new Rule().isInt().toInt(), { multiple: true })
+  .query('tags', new Rule().isInt().toInt(), { array: true })
 
 const subject = fixture.secure()
 
@@ -45,7 +45,7 @@ describe('Patrol', () => {
     expect(req.query.page).toEqual(1)
   })
 
-  it('can handle multiple values', () => {
+  it('can handle array values', () => {
     const { req: a } = run({ tags: ['123', '456'] })
     expect(a.query.tags).toEqual([ 123, 456 ])
 
@@ -53,7 +53,7 @@ describe('Patrol', () => {
     expect(b.query.tags).toEqual([ 123 ])
   })
 
-  it('can handle non-multiple values', () => {
+  it('can handle non-array values', () => {
     const { req } = run({ page: ['99', '99'] })
     expect(req.query.page).toEqual(99)
   })

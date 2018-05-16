@@ -2,7 +2,7 @@ export function single(value) {
   return Array.isArray(value) ? value.slice(-1).pop() : value
 }
 
-export function multiple(value) {
+export function array(value) {
   return [].concat(value)
 }
 

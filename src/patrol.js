@@ -1,5 +1,5 @@
 import { Rule } from './rule'
-import { single, multiple, notEmpty, extend, get } from './util'
+import { single, array, notEmpty, extend, get } from './util'
 
 const test = (value, rule) => {
   if (Rule.validate(rule, value)) {
@@ -20,8 +20,8 @@ function patrol(request, response, next) {
     let result
 
     if (value !== undefined) {
-      if (options.multiple) {
-        const subjects = multiple(value)
+      if (options.array) {
+        const subjects = array(value)
         result = subjects.map((subject) => test(subject, rule)).filter(notEmpty)
       } else {
         const subject = single(value)
