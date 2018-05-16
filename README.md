@@ -47,11 +47,11 @@ Guestlist exports two methods:-
 
 ### `.guard()`
 
-Returns a new instance of [`Guard`](#api-guard) on which to add locations (`req.body`, `req.cookies`, `req.params`, or `req.query`) and properties to check.
+Returns a new instance of [`Guard`](#api-guard).
 
 ### `.rule()`
 
-Returns a new instance of [`Rule`](#api-rule) on which to declare validator and sanitizer criteria.
+Returns a new instance of [`Rule`](#api-rule).
 
 See the [`examples/`][examples] directory for further usage help.
 
@@ -62,27 +62,27 @@ See the [`examples/`][examples] directory for further usage help.
 <a name="api-guard"></a>
 ### `Guard`
 
-The `Guard` class maintains a list of locations and properties to check and the rules each property must follow. This class also generates the middleware used to secure a route.
+The `Guard` class maintains a list of locations and properties to check and the rules each request property must follow. This class also generates the middleware used to secure a route in your application.
 
 ### `.body(property, rule[, options])`
 
-Checks a property with the given rule in `req.body`.
+Checks a property with the given rule in the request body (_note:_ requires post body parsing middleware such as [`body-parser`](https://www.npmjs.com/package/body-parser)).
 
 ### `.cookie(property, rule[, options])`
 
-Checks a property with the given rule in `req.cookies`.
+Checks a property with the given rule in the request cookies (_note:_ requires cookie parsing middleware such as [`cookie-parser`](https://www.npmjs.com/package/cookie-parser)).
 
 ### `.param(property, rule[, options])`
 
-Checks a property with the given rule in `req.params`.
+Checks a property with the given rule in the request parameters.
 
 ### `.query(property, rule[, options])`
 
-Checks a property with the given rule in `req.query`.
+Checks a property with the given rule in the request querystring.
 
 ### `.secure()`
 
-Returns a new instance of the [`Secure`](#api-secure) middleware for the guard.
+Returns the [`Secure`](#api-secure) middleware function for the guard.
 
 ### Options
 
