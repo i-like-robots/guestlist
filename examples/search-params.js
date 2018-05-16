@@ -17,9 +17,9 @@ const app = express()
 
 const queryGuard = guestlist.guard()
   .query('term', guestlist.rule().isLength({ min: 2 }).trim().escape())
-  .query('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
+  .query('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
   .query('date', guestlist.rule().isISO8601().toDate())
-  .query('tags', guestlist.rule().isInt().toInt(), { multiple: true })
+  .query('tags', guestlist.rule().isInt().toInt(), { array: true })
 
 app.get('/', queryGuard.secure(), (req, res) => {
   res.json(req.query)

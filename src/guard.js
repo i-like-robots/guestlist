@@ -3,7 +3,7 @@ import patrol from './patrol'
 import { extend } from './util'
 
 const DEFAULTS = {
-  multiple: false,
+  array: false,
   default: undefined
 }
 

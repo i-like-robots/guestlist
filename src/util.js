@@ -6,7 +6,7 @@ export function array(value) {
   return [].concat(value)
 }
 
-export function notEmpty(value) {
+export function isDefined(value) {
   return value != null
 }
 
