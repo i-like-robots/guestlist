@@ -1,5 +1,5 @@
 import { Rule } from './rule'
-import { single, multiple, extend, get } from './util'
+import { single, array, isDefined, extend, get } from './util'
 
 const test = (value, rule) => {
   if (Rule.validate(rule, value)) {
@@ -17,15 +17,19 @@ function patrol(request, response, next) {
       whitelist[location] = {}
     }
 
+    let result
+
     if (value !== undefined) {
-      if (options.multiple) {
-        const results = multiple(value).map((item) => test(item, rule))
-        whitelist[location][property] = results.filter((result) => result !== undefined)
+      if (options.array) {
+        const subjects = array(value)
+        result = subjects.map((subject) => test(subject, rule)).filter(isDefined)
       } else {
-        const result = test(single(value), rule)
-        whitelist[location][property] = result
+        const subject = single(value)
+        result = test(subject, rule)
       }
     }
+
+    whitelist[location][property] = isDefined(result) ? result : options.default
   }
 
   extend(request, whitelist)

@@ -10,9 +10,9 @@ const guestlist = require('guestlist')
 // Create a new guard to check query string properties
 const queryGuard = guestlist.guard()
   .query('term', guestlist.rule().isLength({ min: 2 }).trim().escape())
-  .query('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt())
+  .query('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
   .query('date', guestlist.rule().isISO8601().toDate())
-  .query('tags', guestlist.rule().isInt().toInt(), { multiple: true })
+  .query('tags', guestlist.rule().isInt().toInt(), { array: true })
 
 // Apply guard as middleware to the route to secure
 app.get('/search', queryGuard.secure(), (req, res, next) => { … })
@@ -43,17 +43,15 @@ $ yarn add guestlist
 
 ## Usage
 
-Guestlist exports three methods:-
+Guestlist exports two methods:-
 
 ### `.guard()`
 
-Returns a new instance of [`Guard`](#api-guard) on which to add locations (`req.body`, `req.cookies`, `req.params`, or `req.query`) and properties to check.
+Returns a new instance of [`Guard`](#api-guard).
 
 ### `.rule()`
 
-Returns a new instance of [`Rule`](#api-rule) on which to declare validator and sanitizer criteria.
-
----
+Returns a new instance of [`Rule`](#api-rule).
 
 See the [`examples/`][examples] directory for further usage help.
 
@@ -64,33 +62,34 @@ See the [`examples/`][examples] directory for further usage help.
 <a name="api-guard"></a>
 ### `Guard`
 
-The `Guard` class maintains a list of locations and properties to check and the rules each property must follow. This class also generates the middleware used to secure a route.
+The `Guard` class maintains a list of locations and properties to check and the rules each request property must follow. This class also generates the middleware used to secure a route in your application.
 
-### `body(property, rule[, options])`
+### `.body(property, rule[, options])`
 
-Checks a property with the given rule in `req.body`.
+Checks a property with the given rule in the request body (_note:_ requires post body parsing middleware such as [`body-parser`](https://www.npmjs.com/package/body-parser)).
 
-### `cookie(property, rule[, options])`
+### `.cookie(property, rule[, options])`
 
-Checks a property with the given rule in `req.cookies`.
+Checks a property with the given rule in the request cookies (_note:_ requires cookie parsing middleware such as [`cookie-parser`](https://www.npmjs.com/package/cookie-parser)).
 
-### `param(property, rule[, options])`
+### `.param(property, rule[, options])`
 
-Checks a property with the given rule in `req.params`.
+Checks a property with the given rule in the request parameters.
 
-### `query(property, rule[, options])`
+### `.query(property, rule[, options])`
 
-Checks a property with the given rule in `req.query`.
+Checks a property with the given rule in the request querystring.
 
-### `secure()`
+### `.secure()`
 
-Returns a new instance of the [`Secure`](#api-secure) middleware for the guard.
+Returns the [`Secure`](#api-secure) middleware function for the guard.
 
 ### Options
 
-Each method accepts a map of options as the final argument  currently supported options are:-
+Each of the Guard methods accepts a set of options as the final argument. The currently supported options are:-
 
-- `multiple` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
+- `array` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
+- `default` Set a default value for properties which are undefined or invalid
 
 <a name="api-rule"></a>
 ### `Rule`
@@ -101,8 +100,6 @@ The `Rule` class provides a fluent interface over [validator.js]. All validator 
 
 <a name="api-secure"></a>
 ### `Secure`
-
-Nothing here yet…
 
 ## Development
 

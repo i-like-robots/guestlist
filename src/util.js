@@ -2,8 +2,12 @@ export function single(value) {
   return Array.isArray(value) ? value.slice(-1).pop() : value
 }
 
-export function multiple(value) {
+export function array(value) {
   return [].concat(value)
+}
+
+export function isDefined(value) {
+  return value != null
 }
 
 export function extend(target, ...items) {
