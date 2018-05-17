@@ -7,6 +7,8 @@ const DEFAULTS = {
   default: undefined
 }
 
+const LOCATIONS = new Set(['body', 'cookies', 'params', 'query'])
+
 export class Guard {
   constructor() {
     this.list = []
@@ -18,11 +20,15 @@ export class Guard {
     }
 
     if (typeof property !== 'string') {
-      throw new TypeError('Expected `property` to be a of type "string"')
+      throw new TypeError('Expected property to be a of type "string"')
     }
 
     if (rule instanceof Rule === false) {
-      throw new TypeError('Expected `rule` to be an instance of Rule')
+      throw new TypeError('Expectedrule to be an instance of Rule')
+    }
+
+    if (!LOCATIONS.has(location)) {
+      throw new TypeError(`Expected property location to be one of ${[...LOCATIONS]}`)
     }
 
     this.list.push({

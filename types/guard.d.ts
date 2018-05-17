@@ -13,10 +13,12 @@ export interface Options {
   default?: any
 }
 
-export declare class Guard {
-  list: Array<Member>
+export type Location = 'body' | 'cookies' | 'params' | 'query'
 
-  permit(location: string, property: string, rule: Rule, options: Options): this
+export declare class Guard {
+  private list: Array<Member>
+
+  private permit(location: Location, property: string, rule: Rule, options: Options): this
 
   body(property: string, rule: Rule, options: Options): this
 
