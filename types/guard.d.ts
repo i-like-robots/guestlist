@@ -18,15 +18,15 @@ export type Location = 'body' | 'cookies' | 'params' | 'query'
 export declare class Guard {
   private list: Array<Member>
 
-  private permit(location: Location, property: string, rule: Rule, options: Options): this
+  private check(location: Location, prop: string, rule: Rule, options: Options): this
 
-  body(property: string, rule: Rule, options: Options): this
+  body(prop: string, rule: Rule, options: Options): this
 
-  cookie(property: string, rule: Rule, options: Options): this
+  cookie(prop: string, rule: Rule, options: Options): this
 
-  param(property: string, rule: Rule, options: Options): this
+  param(prop: string, rule: Rule, options: Options): this
 
-  query(property: string, rule: Rule, options: Options): this
+  query(prop: string, rule: Rule, options: Options): this
 
   secure(): patrol
 }
