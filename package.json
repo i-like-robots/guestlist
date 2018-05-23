@@ -12,6 +12,7 @@
     "@types/express": "^4.11.0",
     "@types/jasmine": "^2.8.6",
     "@types/validator": "^9.4.0",
+    "body-parser": "^1.18.3",
     "coveralls": "^3.0.0",
     "express": "^4.16.2",
     "jasmine": "^3.1.0",
