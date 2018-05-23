@@ -1,8 +1,7 @@
 import { Rule } from './rule'
-import patrol from './patrol'
 import { extend } from './util'
 
-const DEFAULTS = {
+const DEFAULT_OPTIONS = {
   array: false,
   default: undefined
 }
@@ -14,7 +13,7 @@ export class Guard {
     this.list = []
   }
 
-  check(location, property, rule, options) {
+  check(location, property, rule, options = {}) {
     if (typeof location !== 'string') {
       throw new TypeError('Expected location to be a of type "string"')
     }
@@ -35,7 +34,7 @@ export class Guard {
       location,
       property,
       rule,
-      options: extend({}, DEFAULTS, options)
+      options: extend({}, DEFAULT_OPTIONS, options)
     })
 
     return this
@@ -55,10 +54,6 @@ export class Guard {
 
   query(property, rule, options) {
     return this.check('query', property, rule, options)
-  }
-
-  secure() {
-    return patrol.bind(this)
   }
 }
 

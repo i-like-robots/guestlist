@@ -1,13 +1,13 @@
-const { Rule, Guard } = require('../')
+const { rule, guard, secure } = require('../')
 const { createMocks } = require('node-mocks-http')
 
-const fixture = new Guard()
-  .query('term', new Rule().isLength({ min: 2 }).trim().escape())
-  .query('page', new Rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
-  .query('date', new Rule().isISO8601().toDate())
-  .query('tags', new Rule().isInt().toInt(), { array: true })
+const fixture = guard()
+  .query('term', rule().isLength({ min: 2 }).trim().escape())
+  .query('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
+  .query('date', rule().isISO8601().toDate())
+  .query('tags', rule().isInt().toInt(), { array: true })
 
-const subject = fixture.secure()
+const subject = secure(fixture)
 
 const run = (query = {}) => {
   const { req, res } = createMocks({ query })
@@ -18,7 +18,12 @@ const run = (query = {}) => {
   return { req, res, next }
 }
 
-describe('Patrol', () => {
+describe('Secure', () => {
+  it('returns a new middleware function', () => {
+    expect(subject).toEqual(jasmine.any(Function))
+    expect(subject.length).toEqual(3)
+  })
+
   it('calls the fallthrough function', () => {
     const { next } = run()
 
@@ -41,8 +46,11 @@ describe('Patrol', () => {
   })
 
   it('can return a default value', () => {
-    const { req } = run({ page: '0' })
-    expect(req.query.page).toEqual(1)
+    const { req: a } = run()
+    expect(a.query.page).toEqual(1)
+
+    const { req: b } = run({ page: '101' })
+    expect(b.query.page).toEqual(1)
   })
 
   it('can handle array values', () => {

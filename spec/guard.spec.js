@@ -1,12 +1,12 @@
-const { Rule, Guard } = require('../')
+const { rule, guard } = require('../')
 
-const fixture = new Rule()
+const fixture = rule()
 
 describe('Guard', () => {
   let instance
 
   beforeEach(() => {
-    instance = new Guard()
+    instance = guard()
   })
 
   describe('#check', () => {
@@ -78,15 +78,6 @@ describe('Guard', () => {
       })
 
       expect(result).toBeTruthy()
-    })
-  })
-
-  describe('#secure', () => {
-    it('returns a new middleware function', () => {
-      const result = instance.secure()
-
-      expect(result).toEqual(jasmine.any(Function))
-      expect(result.length).toEqual(3)
     })
   })
 })

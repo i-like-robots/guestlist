@@ -1,5 +1,4 @@
 import { Rule } from './rule'
-import patrol from './patrol'
 
 export declare type Member = {
   location: string
@@ -20,15 +19,13 @@ export declare class Guard {
 
   private check(location: Location, prop: string, rule: Rule, options: Options): this
 
-  body(prop: string, rule: Rule, options: Options): this
+  body(property: string, rule: Rule, options?: Options): this
 
-  cookie(prop: string, rule: Rule, options: Options): this
+  cookie(property: string, rule: Rule, options?: Options): this
 
-  param(prop: string, rule: Rule, options: Options): this
+  param(property: string, rule: Rule, options?: Options): this
 
-  query(prop: string, rule: Rule, options: Options): this
-
-  secure(): patrol
+  query(property: string, rule: Rule, options?: Options): this
 }
 
 declare const guard: (target: string) => Guard

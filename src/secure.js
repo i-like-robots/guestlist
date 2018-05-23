@@ -7,7 +7,7 @@ const test = (value, rule) => {
   }
 }
 
-function patrol(request, response, next) {
+function middleware(request, response, next) {
   const whitelist = {}
 
   for (const { location, property, rule, options } of this.list) {
@@ -37,4 +37,4 @@ function patrol(request, response, next) {
   next()
 }
 
-export default patrol
+export default (guard) => middleware.bind(guard)
