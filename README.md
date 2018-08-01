@@ -72,7 +72,7 @@ Each of the methods accepts an optional `options` object as the final argument. 
 
 - `array` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
 - `default` Returns a default value for a property which is undefined or invalid.
-- `postprocess` A function to modify the final value
+- `callback` A function which receives the sanitized value and may modify it
 
 ### Rule
 

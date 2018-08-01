@@ -21,7 +21,7 @@ const app = express()
 const queryGuard = guard()
   .query('term', rule().isLength({ min: 2 }).trim().escape())
   .query('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
-  .query('date', rule().isISO8601().toDate(), { postprocess: formatDate })
+  .query('date', rule().isISO8601().toDate(), { callback: formatDate })
   .query('tags', rule().isInt().toInt(), { array: true })
 
 app.get('/', secure(queryGuard), (req, res) => {

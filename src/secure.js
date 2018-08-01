@@ -30,7 +30,7 @@ function middleware(request, response, next) {
     }
 
     if (isDefined(result)) {
-      whitelist[location][property] = options.postprocess(result)
+      whitelist[location][property] = options.callback(result)
     } else {
       whitelist[location][property] = options.default
     }
