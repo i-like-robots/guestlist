@@ -29,7 +29,11 @@ function middleware(request, response, next) {
       }
     }
 
-    whitelist[location][property] = isDefined(result) ? result : options.default
+    if (isDefined(result)) {
+      whitelist[location][property] = options.postprocess(result)
+    } else {
+      whitelist[location][property] = options.default
+    }
   }
 
   extend(request, whitelist)
