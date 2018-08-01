@@ -72,6 +72,7 @@ Each of the methods accepts an optional `options` object as the final argument. 
 
 - `array` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
 - `default` Returns a default value for a property which is undefined or invalid.
+- `postprocess` A function to modify the final value
 
 ### Rule
 
@@ -80,14 +81,17 @@ The `rule()` method provides a fluent interface for validator.js. All [validator
 Here are a few example rules for validating and sanitizing numbers, dates, and strings:
 
 ```js
-// Assert the property is a number between 1 and 30 and a factor of 3 then coerce to a Number
+// Validate: Assert the value is a number between 1 and 30 and a factor of 3
+// Sanitize: Coerce the value to a Number
 rule().isInt({ min: 1, max: 30 }).isDivisibleBy(3).toInt()
 
-// Assert the property is an ISO date string then coerce to a Date
+// Validate: Assert the value is an ISO date string
+// Sanitize: Coerce the value to a Date
 rule().isISO8601().toDate()
 
-// Assert the property is a string between 2 and 10 characters then escape for use in HTML
-rule().isLength({ min: 1, max: 10 }).escape()
+// Validate: Assert the property is a string between 2 and 10 characters
+// Sanitize: Escape and trim the value
+rule().isLength({ min: 1, max: 10 }).escape().trim()
 ```
 
 [methods]: https://www.npmjs.com/package/validator#validators
