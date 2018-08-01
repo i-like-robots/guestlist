@@ -1,59 +1,60 @@
 import { Rule } from './rule'
-import patrol from './patrol'
 import { extend } from './util'
 
-const DEFAULTS = {
+const DEFAULT_OPTIONS = {
   array: false,
   default: undefined
 }
+
+const LOCATIONS = new Set(['body', 'cookies', 'params', 'query'])
 
 export class Guard {
   constructor() {
     this.list = []
   }
 
-  permit(location, property, rule, options) {
+  check(location, property, rule, options = {}) {
     if (typeof location !== 'string') {
       throw new TypeError('Expected location to be a of type "string"')
     }
 
     if (typeof property !== 'string') {
-      throw new TypeError('Expected `property` to be a of type "string"')
+      throw new TypeError('Expected property to be a of type "string"')
     }
 
     if (rule instanceof Rule === false) {
-      throw new TypeError('Expected `rule` to be an instance of Rule')
+      throw new TypeError('Expectedrule to be an instance of Rule')
+    }
+
+    if (!LOCATIONS.has(location)) {
+      throw new TypeError(`Expected property location to be one of ${[...LOCATIONS]}`)
     }
 
     this.list.push({
       location,
       property,
       rule,
-      options: extend({}, DEFAULTS, options)
+      options: extend({}, DEFAULT_OPTIONS, options)
     })
 
     return this
   }
 
   body(property, rule, options) {
-    return this.permit('body', property, rule, options)
+    return this.check('body', property, rule, options)
   }
 
   cookie(property, rule, options) {
-    return this.permit('cookies', property, rule, options)
+    return this.check('cookies', property, rule, options)
   }
 
   param(property, rule, options) {
-    return this.permit('params', property, rule, options)
+    return this.check('params', property, rule, options)
   }
 
   query(property, rule, options) {
-    return this.permit('query', property, rule, options)
-  }
-
-  secure() {
-    return patrol.bind(this)
+    return this.check('query', property, rule, options)
   }
 }
 
-export default (target) => new Guard()
+export default () => new Guard()

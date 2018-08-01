@@ -1,24 +1,24 @@
-const { Rule, Guard } = require('../')
+const { rule, guard } = require('../')
 
-const fixture = new Rule()
+const fixture = rule()
 
 describe('Guard', () => {
   let instance
 
   beforeEach(() => {
-    instance = new Guard()
+    instance = guard()
   })
 
-  describe('#permit', () => {
+  describe('#check', () => {
     it('requires a valid location, parameter, and a rule', () => {
-      expect(() => instance.permit('body', 'param', fixture)).not.toThrowError()
-      expect(() => instance.permit('body', null, fixture)).toThrowError()
-      expect(() => instance.permit(null, 'param', fixture)).toThrowError()
+      expect(() => instance.check('body', 'param', fixture)).not.toThrowError()
+      expect(() => instance.check('body', null, fixture)).toThrowError()
+      expect(() => instance.check(null, 'param', fixture)).toThrowError()
     })
 
     it('appends valid members to the list', () => {
-      instance.permit('body', 'foo', fixture)
-      instance.permit('body', 'bar', fixture)
+      instance.check('body', 'foo', fixture)
+      instance.check('body', 'bar', fixture)
 
       expect(instance.list.length).toEqual(2)
 
@@ -78,15 +78,6 @@ describe('Guard', () => {
       })
 
       expect(result).toBeTruthy()
-    })
-  })
-
-  describe('#secure', () => {
-    it('returns a new middleware function', () => {
-      const result = instance.secure()
-
-      expect(result).toEqual(jasmine.any(Function))
-      expect(result.length).toEqual(3)
     })
   })
 })

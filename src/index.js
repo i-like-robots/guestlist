@@ -1,3 +1,4 @@
 import rule, { Rule } from './rule'
 import guard, { Guard } from './guard'
-export { rule, Rule, guard, Guard }
+import secure from './secure'
+export { rule, Rule, guard, Guard, secure }

@@ -1,9 +1,9 @@
-const { Rule } = require('../')
+const { Rule, rule } = require('../')
 
 const subject = {
-  a: new Rule().isInt({ min: 1, max: 100 }).toInt(),
-  b: new Rule().isLength({ min: 3 }).contains('!').trim().blacklist('!'),
-  c: new Rule().isISO8601().isAfter('2000-01-01 00:00:00').toDate()
+  a: rule().isInt({ min: 1, max: 100 }).toInt(),
+  b: rule().isLength({ min: 3 }).contains('!').trim().blacklist('!'),
+  c: rule().isISO8601().isAfter('2000-01-01 00:00:00').toDate()
 }
 
 describe('Rule', () => {

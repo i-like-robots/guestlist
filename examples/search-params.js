@@ -1,5 +1,5 @@
 const express = require('express')
-const guestlist = require('../')
+const { guard, rule, secure } = require('../')
 
 const help = `
 The server is listening on http://localhost:3000
@@ -15,13 +15,13 @@ Press ctrl+c to stop server.
 
 const app = express()
 
-const queryGuard = guestlist.guard()
-  .query('term', guestlist.rule().isLength({ min: 2 }).trim().escape())
-  .query('page', guestlist.rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
-  .query('date', guestlist.rule().isISO8601().toDate())
-  .query('tags', guestlist.rule().isInt().toInt(), { array: true })
+const queryGuard = guard()
+  .query('term', rule().isLength({ min: 2 }).trim().escape())
+  .query('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
+  .query('date', rule().isISO8601().toDate())
+  .query('tags', rule().isInt().toInt(), { array: true })
 
-app.get('/', queryGuard.secure(), (req, res) => {
+app.get('/', secure(queryGuard), (req, res) => {
   res.json(req.query)
 })
 

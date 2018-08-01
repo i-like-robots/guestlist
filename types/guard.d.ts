@@ -1,5 +1,4 @@
 import { Rule } from './rule'
-import patrol from './patrol'
 
 export declare type Member = {
   location: string
@@ -13,22 +12,22 @@ export interface Options {
   default?: any
 }
 
+export type Location = 'body' | 'cookies' | 'params' | 'query'
+
 export declare class Guard {
-  list: Array<Member>
+  private list: Array<Member>
 
-  permit(location: string, property: string, rule: Rule, options: Options): this
+  private check(location: Location, prop: string, rule: Rule, options: Options): this
 
-  body(property: string, rule: Rule, options: Options): this
+  body(property: string, rule: Rule, options?: Options): this
 
-  cookie(property: string, rule: Rule, options: Options): this
+  cookie(property: string, rule: Rule, options?: Options): this
 
-  param(property: string, rule: Rule, options: Options): this
+  param(property: string, rule: Rule, options?: Options): this
 
-  query(property: string, rule: Rule, options: Options): this
-
-  secure(): patrol
+  query(property: string, rule: Rule, options?: Options): this
 }
 
-declare const guard: (target: string) => Guard
+declare const guard: () => Guard
 
 export default guard
