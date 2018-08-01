@@ -2,7 +2,10 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/i-like-robots/guestlist/blob/master/LICENSE) [![Build Status](https://travis-ci.org/i-like-robots/guestlist.svg?branch=master)](https://travis-ci.org/i-like-robots/guestlist) [![Coverage Status](https://coveralls.io/repos/github/i-like-robots/guestlist/badge.svg?branch=master)](https://coveralls.io/github/i-like-robots/guestlist) [![npm version](https://img.shields.io/npm/v/guestlist.svg?style=flat)](https://www.npmjs.com/package/guestlist)
 
-Middleware to whitelist, validate, and sanitize your request properties. Compatible with Express and Fastify.
+Middleware powered by [validator.js] to whitelist, validate, and sanitize request properties for your [express.js] apps.
+
+[validator.js]: https://www.npmjs.com/package/validator
+[express.js]: https://expressjs.com/
 
 ```js
 const { guard, rule, secure } = require('guestlist')
@@ -36,13 +39,20 @@ $ npm install -S guestlist
 
 ## Features
 
-- Validate, sanitize and [coerce] request parameters with [validator.js]
+- Validate and sanitize request parameters with [validator.js]
 - Concise, fluent API
-- Compatible with [Express] and [Fastify]
+- Provides middleware functions compatible with express.js and [Fastify]
 
-[validator.js]: https://www.npmjs.com/package/validator
-[Express]: https://expressjs.com/
 [Fastify]: https://www.fastify.io/
+
+## Differences to express-validator
+
+The [express-validator] package also wraps validator.js to provide middleware for your express.js apps. The primary difference between Guestlist and express-validator is the way that they handle invalid data:
+
+- Guestlist will ignore invalid or unexpected request properties and remove them from the target request object.
+- The express-validator module provides tools for creating error messages and separate methods for retrieving only the valid properties.
+
+[express-validator]: https://express-validator.github.io/docs/
 
 ## Usage
 

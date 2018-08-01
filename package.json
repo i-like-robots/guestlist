@@ -1,7 +1,7 @@
 {
   "name": "guestlist",
   "version": "1.0.0",
-  "description": "Middleware to whitelist, validate, and sanitize your request properties. Compatible with Express and Fastify.",
+  "description": "Middleware powered by validator.js to whitelist, validate, and sanitize request properties for your express.js apps.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "types/index.d.ts",
