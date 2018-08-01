@@ -57,4 +57,4 @@ export class Guard {
   }
 }
 
-export default (target) => new Guard()
+export default () => new Guard()

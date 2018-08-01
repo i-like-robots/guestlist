@@ -28,6 +28,6 @@ export declare class Guard {
   query(property: string, rule: Rule, options?: Options): this
 }
 
-declare const guard: (target: string) => Guard
+declare const guard: () => Guard
 
 export default guard
