@@ -3,8 +3,7 @@ import { extend } from './util'
 
 const DEFAULT_OPTIONS = {
   array: false,
-  default: undefined,
-  callback: (value) => value
+  default: undefined
 }
 
 const LOCATIONS = new Set(['body', 'cookies', 'params', 'query'])

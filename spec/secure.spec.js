@@ -5,7 +5,7 @@ const fixture = guard()
   .query('term', rule().isLength({ min: 2 }).trim().escape())
   .query('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
   .query('date', rule().isISO8601().toDate())
-  .query('year', rule().isISO8601().toDate(), { callback: (date) => date.getFullYear() })
+  .query('year', rule().isISO8601().toDate().customSanitizer((date) => date.getFullYear()))
   .query('tags', rule().isInt().toInt(), { array: true })
 
 const subject = secure(fixture)

@@ -50,7 +50,7 @@ $ npm install -S guestlist
 The [express-validator] package also wraps validator.js to provide middleware for your express.js apps. The primary difference between Guestlist and express-validator is the way that they handle invalid data:
 
 - Guestlist will ignore invalid or unexpected request properties and remove them from the target request object.
-- The express-validator module provides tools for creating error messages and separate methods for retrieving only the valid properties.
+- The express-validator module provides tools for creating error messages and provides separate methods for retrieving only the valid properties.
 
 [express-validator]: https://express-validator.github.io/docs/
 
@@ -82,7 +82,6 @@ Each of the methods accepts an optional `options` object as the final argument. 
 
 - `array` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
 - `default` Returns a default value for a property which is undefined or invalid.
-- `callback` A function which receives the sanitized value and may modify it
 
 ### Rule
 
@@ -104,11 +103,25 @@ rule().isISO8601().toDate()
 rule().isLength({ min: 1, max: 10 }).escape().trim()
 ```
 
+Occasionally validator.js may not provide the functionality you require. In these cases you may write a custom validator or sanitizer function:
+
+```js
+// Ignore property if a flag is disabled
+const checkFlag = () => flagsPoller.get('allowSorting')
+rule().customValidator(checkFlag).isIn([ 'asc', 'desc' ])
+
+// Format the date as a YYYY-MM-DD string
+const formatDate = (date) => date.toISOString().slice(0, 10);
+rule().isISO8601().toDate().customSanitizer(formatDate)
+```
+
 [methods]: https://www.npmjs.com/package/validator#validators
 
 ### Secure
 
 The `secure(guard)` method generates the middleware used to protect your route using the expected properties and rules held by the given guard.
+
+Any properties which do not meet the rules will be removed from the request object.
 
 ## Development
 

@@ -79,23 +79,35 @@ export class Rule {
     this.sanitizers = []
   }
 
+  // iterate over each validator ensuring each is true
   static validate(instance, value) {
     return instance.validators.every(({ method, args }) =>
-      Reflect.apply(validator[method], null, [value, ...args])
+      Reflect.apply(method, null, [value, ...args])
     )
   }
 
+  // iterate over each sanitizer, passing the new value to the next
   static sanitize(instance, value) {
     return instance.sanitizers.reduce((value, { method, args }) => {
-      return Reflect.apply(validator[method], null, [value, ...args])
+      return Reflect.apply(method, null, [value, ...args])
     }, value)
+  }
+
+  customValidator(callback) {
+    this.validators.push({ method: callback, args: [] })
+    return this
+  }
+
+  customSanitizer(callback) {
+    this.sanitizers.push({ method: callback, args: [] })
+    return this
   }
 }
 
 for (const method of VALIDATORS) {
   if (validator.hasOwnProperty(method)) {
     Rule.prototype[method] = function(...args) {
-      this.validators.push({ method, args })
+      this.validators.push({ method: validator[method], args })
       return this
     }
   }
@@ -104,7 +116,7 @@ for (const method of VALIDATORS) {
 for (const method of SANITIZERS) {
   if (validator.hasOwnProperty(method)) {
     Rule.prototype[method] = function(...args) {
-      this.sanitizers.push({ method, args })
+      this.sanitizers.push({ method: validator[method], args })
       return this
     }
   }

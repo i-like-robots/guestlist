@@ -1,9 +1,11 @@
 const { Rule, rule } = require('../')
 
+const plusOne = (number) => number + 1
+
 const subject = {
-  a: rule().isInt({ min: 1, max: 100 }).toInt(),
+  a: rule().isInt({ min: 1, max: 100 }).toInt().customSanitizer(plusOne),
   b: rule().isLength({ min: 3 }).contains('!').trim().blacklist('!'),
-  c: rule().isISO8601().isAfter('2000-01-01 00:00:00').toDate()
+  c: rule().isISO8601().isAfter('2000-01-01').toDate()
 }
 
 describe('Rule', () => {
@@ -14,7 +16,7 @@ describe('Rule', () => {
   })
 
   it('appends sanitizers to list of sanitizers', () => {
-    expect(subject.a.sanitizers.length).toEqual(1)
+    expect(subject.a.sanitizers.length).toEqual(2)
     expect(subject.b.sanitizers.length).toEqual(2)
     expect(subject.c.sanitizers.length).toEqual(1)
   })
@@ -37,7 +39,7 @@ describe('Rule', () => {
 
   describe('#sanitize', () => {
     it('runs a value through each sanitizer', () => {
-      expect(Rule.sanitize(subject.a, '1')).toEqual(1)
+      expect(Rule.sanitize(subject.a, '1')).toEqual(2)
       expect(Rule.sanitize(subject.b, ' Hello World! ')).toEqual('Hello World')
       expect(Rule.sanitize(subject.c, '2018-01-01')).toEqual(jasmine.any(Date))
     })
