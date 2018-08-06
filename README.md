@@ -2,7 +2,10 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/i-like-robots/guestlist/blob/master/LICENSE) [![Build Status](https://travis-ci.org/i-like-robots/guestlist.svg?branch=master)](https://travis-ci.org/i-like-robots/guestlist) [![Coverage Status](https://coveralls.io/repos/github/i-like-robots/guestlist/badge.svg?branch=master)](https://coveralls.io/github/i-like-robots/guestlist) [![npm version](https://img.shields.io/npm/v/guestlist.svg?style=flat)](https://www.npmjs.com/package/guestlist)
 
-Middleware to whitelist, validate, and sanitize your request properties. Compatible with Express and Fastify.
+Middleware powered by [validator.js] to whitelist, validate, and sanitize request properties for your [express.js] apps.
+
+[validator.js]: https://www.npmjs.com/package/validator
+[express.js]: https://expressjs.com/
 
 ```js
 const { guard, rule, secure } = require('guestlist')
@@ -36,13 +39,20 @@ $ npm install -S guestlist
 
 ## Features
 
-- Validate, sanitize and [coerce] request parameters with [validator.js]
+- Validate and sanitize request parameters with [validator.js]
 - Concise, fluent API
-- Compatible with [Express] and [Fastify]
+- Provides middleware functions compatible with express.js and [Fastify]
 
-[validator.js]: https://www.npmjs.com/package/validator
-[Express]: https://expressjs.com/
 [Fastify]: https://www.fastify.io/
+
+## Differences to express-validator
+
+The [express-validator] package also wraps validator.js to provide middleware for your express.js apps. The primary difference between Guestlist and express-validator is the way that they handle invalid data:
+
+- Guestlist will ignore invalid or unexpected request properties and remove them from the target request object.
+- The express-validator module provides tools for creating error messages and provides separate methods for retrieving only the valid properties.
+
+[express-validator]: https://express-validator.github.io/docs/
 
 ## Usage
 
@@ -80,14 +90,29 @@ The `rule()` method provides a fluent interface for validator.js. All [validator
 Here are a few example rules for validating and sanitizing numbers, dates, and strings:
 
 ```js
-// Assert the property is a number between 1 and 30 and a factor of 3 then coerce to a Number
+// Validate: Assert the value is a number between 1 and 30 and a factor of 3
+// Sanitize: Coerce the value to a Number
 rule().isInt({ min: 1, max: 30 }).isDivisibleBy(3).toInt()
 
-// Assert the property is an ISO date string then coerce to a Date
+// Validate: Assert the value is an ISO date string
+// Sanitize: Coerce the value to a Date
 rule().isISO8601().toDate()
 
-// Assert the property is a string between 2 and 10 characters then escape for use in HTML
-rule().isLength({ min: 1, max: 10 }).escape()
+// Validate: Assert the property is a string between 2 and 10 characters
+// Sanitize: Escape and trim the value
+rule().isLength({ min: 1, max: 10 }).escape().trim()
+```
+
+Occasionally validator.js may not provide the functionality you require. In these cases you may write a custom validator or sanitizer function:
+
+```js
+// Ignore property if a flag is disabled
+const checkFlag = () => flagsPoller.get('allowSorting')
+rule().customValidator(checkFlag).isIn([ 'asc', 'desc' ])
+
+// Format the date as a YYYY-MM-DD string
+const formatDate = (date) => date.toISOString().slice(0, 10);
+rule().isISO8601().toDate().customSanitizer(formatDate)
 ```
 
 [methods]: https://www.npmjs.com/package/validator#validators
@@ -95,6 +120,8 @@ rule().isLength({ min: 1, max: 10 }).escape()
 ### Secure
 
 The `secure(guard)` method generates the middleware used to protect your route using the expected properties and rules held by the given guard.
+
+Any properties which do not meet the rules will be removed from the request object.
 
 ## Development
 

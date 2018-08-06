@@ -13,12 +13,15 @@ Try it out:-
 Press ctrl+c to stop server.
 `
 
+// Format the date as a YYYY-MM-DD string
+const formatDate = (date) => date.toISOString().slice(0, 10);
+
 const app = express()
 
 const queryGuard = guard()
   .query('term', rule().isLength({ min: 2 }).trim().escape())
   .query('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
-  .query('date', rule().isISO8601().toDate())
+  .query('date', rule().isISO8601().toDate().customSanitizer(formatDate))
   .query('tags', rule().isInt().toInt(), { array: true })
 
 app.get('/', secure(queryGuard), (req, res) => {

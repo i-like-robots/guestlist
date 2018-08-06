@@ -5,6 +5,7 @@ const fixture = guard()
   .query('term', rule().isLength({ min: 2 }).trim().escape())
   .query('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
   .query('date', rule().isISO8601().toDate())
+  .query('year', rule().isISO8601().toDate().customSanitizer((date) => date.getFullYear()))
   .query('tags', rule().isInt().toInt(), { array: true })
 
 const subject = secure(fixture)
@@ -64,5 +65,10 @@ describe('Secure', () => {
   it('can handle non-array values', () => {
     const { req } = run({ page: ['99', '99'] })
     expect(req.query.page).toEqual(99)
+  })
+
+  it('allows the resultant value to modified', () => {
+    const { req } = run({ year: '2018-06-30' })
+    expect(req.query.year).toEqual(2018)
   })
 })
