@@ -46,6 +46,13 @@ describe('Secure', () => {
     expect(req.query.date).toBeUndefined()
   })
 
+  it('ignores removes invalid parameters from the request', () => {
+    const { req } = run({ term: '', date: 'January 1 2018' })
+
+    expect(req.query.hasOwnProperty('term')).toEqual(false)
+    expect(req.query.hasOwnProperty('date')).toEqual(false)
+  })
+
   it('can return a default value', () => {
     const { req: a } = run()
     expect(a.query.page).toEqual(1)
