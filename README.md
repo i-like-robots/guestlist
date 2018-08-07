@@ -47,10 +47,14 @@ $ npm install -S guestlist
 
 ## Differences to express-validator
 
-The [express-validator] package also wraps validator.js to provide middleware for your express.js apps. The primary difference between Guestlist and express-validator is the way that they handle invalid data:
+The [express-validator] package also wraps validator.js to provide middleware for your express.js apps and Guestlist shares several similarities. The primary difference between the two modules is the way each handles invalid data:
 
-- Guestlist will ignore invalid or unexpected request properties and remove them from the target request object.
-- The express-validator module provides tools for creating error messages and provides separate methods for retrieving only the valid properties.
+- Guestlist will ignore invalid or unexpected request properties and remove them from the request object.
+- The express-validator module provides tools for creating error messages and separate methods for retrieving only the valid properties.
+
+If you need to validate the data and return feedback to the user you should use express-validator. If you would rather ignore invalid data then Guestlist may suit you better.
+
+One handy feature of Guestlist which is not currently available in express-validator is that it also supports applying validators and sanitizers to an array of values. This is very useful if you need to permit multiple values for a property, for example if you need to accept a form containing a set of checkboxes.
 
 [express-validator]: https://express-validator.github.io/docs/
 
