@@ -1,5 +1,7 @@
 import { Rule } from './rule'
-import { single, array, isDefined, extend, get } from './util'
+import { single, array, isDefined, find } from './util'
+
+const locations = ['query', 'params', 'body', 'cookies']
 
 const test = (value, rule) => {
   if (Rule.validate(rule, value)) {
@@ -7,15 +9,11 @@ const test = (value, rule) => {
   }
 }
 
-function middleware(request, response, next) {
+export default function validate(request, safelist) {
   const whitelist = {}
 
-  for (const { location, property, rule, options } of this.list) {
-    const value = get(request, location, property)
-
-    if (!whitelist.hasOwnProperty(location)) {
-      whitelist[location] = {}
-    }
+  for (const { property, rule, options } of safelist.list) {
+    const value = find(request, property, locations)
 
     let result
 
@@ -30,15 +28,11 @@ function middleware(request, response, next) {
     }
 
     if (isDefined(result)) {
-      whitelist[location][property] = result
+      whitelist[property] = result
     } else if (isDefined(options.default)) {
-      whitelist[location][property] = options.default
+      whitelist[property] = options.default
     }
   }
 
-  extend(request, whitelist)
-
-  next()
+  return whitelist
 }
-
-export default (guard) => middleware.bind(guard)

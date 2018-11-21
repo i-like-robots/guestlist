@@ -1,6 +1,6 @@
 import validator from 'validator'
 
-const VALIDATORS = new Set([
+const validators = new Set([
   'contains',
   'equals',
   'isAfter',
@@ -56,7 +56,7 @@ const VALIDATORS = new Set([
   'matches'
 ])
 
-const SANITIZERS = new Set([
+const sanitizers = new Set([
   'blacklist',
   'escape',
   'ltrim',
@@ -104,7 +104,8 @@ export class Rule {
   }
 }
 
-for (const method of VALIDATORS) {
+// Append a proxy for each validator method
+for (const method of validators) {
   if (validator.hasOwnProperty(method)) {
     Rule.prototype[method] = function(...args) {
       this.validators.push({ method: validator[method], args })
@@ -113,7 +114,8 @@ for (const method of VALIDATORS) {
   }
 }
 
-for (const method of SANITIZERS) {
+// Append a proxy for each sanitizer method
+for (const method of sanitizers) {
   if (validator.hasOwnProperty(method)) {
     Rule.prototype[method] = function(...args) {
       this.sanitizers.push({ method: validator[method], args })

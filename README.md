@@ -8,15 +8,17 @@ Middleware powered by [validator.js] to whitelist, validate, and sanitize reques
 [express.js]: https://expressjs.com/
 
 ```js
-const { guard, rule, secure } = require('guestlist')
+const { guard, rule, validate } = require('guestlist')
 
-const queryGuard = guard()
-  .query('term', rule().isLength({ min: 2 }).trim().escape())
-  .query('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
-  .query('date', rule().isISO8601().toDate())
-  .query('tags', rule().isInt().toInt(), { array: true })
+const safelist = guard()
+  .permit('term', rule().isLength({ min: 2 }).trim().escape())
+  .permit('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
+  .permit('date', rule().isISO8601().toDate())
+  .permit('tags', rule().isInt().toInt(), { array: true })
 
-app.get('/search', secure(queryGuard), (req, res, next) => { … })
+app.get('/search', (request, response, next) => {
+  const validProperties = validate(request, safelist)
+})
 ```
 
 With Guestlist protecting your route any request properties that are not expected or do not follow the rules will not be allowed through. In other words:
