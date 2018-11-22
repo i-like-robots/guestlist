@@ -1,7 +1,7 @@
 import { Rule } from './rule'
 import { single, array, isDefined, find } from './util'
 
-const locations = ['query', 'params', 'body', 'cookies']
+const defaultLocations = ['body', 'params', 'query', 'cookies']
 
 const test = (value, rule) => {
   if (Rule.validate(rule, value)) {
@@ -9,7 +9,7 @@ const test = (value, rule) => {
   }
 }
 
-export default function validate(request, safelist) {
+export default function validate(request, safelist, locations = defaultLocations) {
   const whitelist = {}
 
   for (const { property, rule, options } of safelist.list) {
