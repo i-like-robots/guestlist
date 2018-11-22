@@ -5,6 +5,8 @@ export declare type Criterion = {
   args: Array<any>
 }
 
+declare type IdentityCardLocale = 'any' | 'ES'
+
 export declare class Rule {
   validators: Array<Criterion>
   sanitizers: Array<Criterion>
@@ -65,6 +67,9 @@ export declare class Rule {
   // check if the string is a data uri format (https://developer.mozilla.org/en-US/docs/Web/HTTP/data_URIs)
   isDataURI(): this
 
+  // check if the string is a magnet uri format (https://en.wikipedia.org/wiki/Magnet_URI_scheme).
+  isMagnetURI(): this
+
   // check if the string represents a decimal number, such as 0.1, .3, 1.1, 1.00003, 4.0, etc.
   isDecimal(options?: ValidatorJS.IsDecimalOptions): this
 
@@ -100,8 +105,14 @@ export declare class Rule {
   // check if the string is a hexadecimal number.
   isHexadecimal(): this
 
+  // check if the string is a valid identity card code.
+  isIdentityCard(locale?: IdentityCardLocale): this
+
   // check if the string is an IP (version 4 or 6).
   isIP(version?: number): this
+
+  // check if the string is an IP Range(version 4 only).
+  isIPRange(): this
 
   // check if the string is an ISBN (version 10 or 13).
   isISBN(version?: number): this
@@ -114,11 +125,18 @@ export declare class Rule {
   isISIN(): this
 
   // check if the string is a valid ISO 8601 (https://en.wikipedia.org/wiki/ISO_8601) date.
-  isISO8601(): this
+  isISO8601(options?: ValidatorJS.IsISO8601Options): this
+
+  // check if the string is a valid RFC 3339 date (https://tools.ietf.org/html/rfc3339).
+  isRFC3339(): this
 
   // check if the string is a valid ISO 3166-1 alpha-2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) officially assigned
   // country code.
   isISO31661Alpha2(): this
+
+  // check if the string is a valid ISO 3166-1 alpha-3 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) officially assigned
+  // country code.
+  isISO31661Alpha3(): this
 
   // check if the string is a ISRC (https://en.wikipedia.org/wiki/International_Standard_Recording_Code).
   isISRC(): this
@@ -131,6 +149,9 @@ export declare class Rule {
 
   // check if the string is valid JSON (note: uses JSON.parse).
   isJSON(): this
+
+  // check if the string is valid JWT token.
+  isJWT(): this
 
   // check if the string is a valid latitude-longitude coordinate in the format lat,long or lat, long.
   isLatLong(): this
@@ -172,7 +193,7 @@ export declare class Rule {
   isMultibyte(): this
 
   // check if the string contains only numbers.
-  isNumeric(): this
+  isNumeric(options?: ValidatorJS.IsNumericOptions): this
 
   // check if the string is a valid port number.
   isPort(): this
