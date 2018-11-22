@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const { guard, rule, secure } = require('../')
+const { guard, rule, validate } = require('../')
 
 const help = `
 The server is listening on http://localhost:3000
@@ -61,18 +61,19 @@ const html = `
 
 const app = express()
 
-const formGuard = guard()
-  .body('name', rule().isLength({ min: 2 }).trim())
-  .body('age', rule().isInt({ min: 18 }).toInt())
-  .body('hobbies', rule().isIn(hobbies), { array: true })
-  .body('ambition', rule().isInt({ min: 1, max: 10 }).toInt())
+const safelist = guard()
+  .permit('name', rule().isLength({ min: 2 }).trim())
+  .permit('age', rule().isInt({ min: 18 }).toInt())
+  .permit('hobbies', rule().isIn(hobbies), { array: true })
+  .permit('ambition', rule().isInt({ min: 1, max: 10 }).toInt())
 
-app.get('/', (req, res) => {
-  res.send(html)
+app.get('/', (request, response) => {
+  response.send(html)
 })
 
-app.post('/', bodyParser.urlencoded({ extended: false }), secure(formGuard), (req, res) => {
-  res.json(req.body)
+app.post('/', bodyParser.urlencoded({ extended: false }), (request, response) => {
+  const validated = validate(request, safelist)
+  response.json(validated)
 });
 
 app.listen(3000, () => console.log(help))
