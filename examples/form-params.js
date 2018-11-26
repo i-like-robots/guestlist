@@ -72,8 +72,8 @@ app.get('/', (request, response) => {
 })
 
 app.post('/', bodyParser.urlencoded({ extended: false }), (request, response) => {
-  const validated = validate(request, safelist)
-  response.json(validated)
+  const validProperties = validate(request, safelist)
+  response.json(validProperties)
 });
 
 app.listen(3000, () => console.log(help))

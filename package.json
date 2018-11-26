@@ -1,7 +1,7 @@
 {
   "name": "guestlist",
   "version": "1.2.0",
-  "description": "Middleware powered by validator.js to whitelist, validate, and sanitize request properties for your express.js apps.",
+  "description": "Guestlist is a library powered by validator.js to whitelist, validate, and sanitize request properties for your web facing apps",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "types/index.d.ts",
@@ -40,6 +40,7 @@
     "node": ">= 8.0.0"
   },
   "keywords": [
+    "koa",
     "express",
     "fastify",
     "middleware",

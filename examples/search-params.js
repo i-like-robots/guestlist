@@ -25,8 +25,8 @@ const safelist = guard()
   .permit('tags', rule().isInt().toInt(), { array: true })
 
 app.get('/', (request, response) => {
-  const validated = validate(request, safelist)
-  response.json(validated)
+  const validProperties = validate(request, safelist)
+  response.json(validProperties)
 })
 
 app.listen(3000, () => console.log(help))
