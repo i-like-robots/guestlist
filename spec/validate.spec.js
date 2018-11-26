@@ -1,12 +1,12 @@
-const { rule, guard, validate } = require('../')
+const { rule, list, validate } = require('../')
 const { createMocks } = require('node-mocks-http')
 
-const safelist = guard()
-  .permit('term', rule().isLength({ min: 2 }).trim().escape())
-  .permit('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
-  .permit('date', rule().isISO8601().toDate())
-  .permit('year', rule().isISO8601().toDate().customSanitizer((date) => date.getFullYear()))
-  .permit('tags', rule().isInt().toInt(), { array: true })
+const safelist = list()
+  .add('term', rule().isLength({ min: 2 }).trim().escape())
+  .add('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
+  .add('date', rule().isISO8601().toDate())
+  .add('year', rule().isISO8601().toDate().customSanitizer((date) => date.getFullYear()))
+  .add('tags', rule().isInt().toInt(), { array: true })
 
 const run = (query = {}) => {
   const mocks = createMocks({ query })

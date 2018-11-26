@@ -1,23 +1,23 @@
-const { rule, guard } = require('../')
+const { rule, list } = require('../')
 
 const fixture = rule()
 
-describe('Guard', () => {
+describe('List', () => {
   let instance
 
   beforeEach(() => {
-    instance = guard()
+    instance = list()
   })
 
-  describe('#permit', () => {
+  describe('#add', () => {
     it('requires a valid parameter name and a rule', () => {
-      expect(() => instance.permit('param', fixture)).not.toThrowError()
-      expect(() => instance.permit(null, fixture)).toThrowError()
+      expect(() => instance.add('param', fixture)).not.toThrowError()
+      expect(() => instance.add(null, fixture)).toThrowError()
     })
 
     it('appends valid members to the list', () => {
-      instance.permit('foo', fixture)
-      instance.permit('bar', fixture)
+      instance.add('foo', fixture)
+      instance.add('bar', fixture)
 
       expect(instance.list.length).toEqual(2)
 

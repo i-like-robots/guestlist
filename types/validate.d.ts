@@ -1,7 +1,7 @@
 /// <reference types="express" />
 import { Request } from 'express'
-import { Guard } from './guard'
+import { List } from './list'
 
-declare function validate (request: Request, safelist: Guard, locations?: string[]): AnyObject
+declare function validate (request: Request, safelist: List, locations?: string[]): Object
 
 export default validate

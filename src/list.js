@@ -5,12 +5,12 @@ const defaultOptions = {
   default: undefined
 }
 
-export class Guard {
+export class List {
   constructor() {
     this.list = []
   }
 
-  permit(property, rule, userOptions = {}) {
+  add(property, rule, userOptions = {}) {
     if (typeof property !== 'string') {
       throw new TypeError('Expected property to be a of type "string"')
     }
@@ -29,4 +29,4 @@ export class Guard {
   }
 }
 
-export default () => new Guard()
+export default () => new List()

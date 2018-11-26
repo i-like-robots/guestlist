@@ -11,12 +11,12 @@ export interface Options {
   default?: any
 }
 
-export declare class Guard {
+export declare class List {
   private list: Array<Member>
 
-  private permit(prop: string, rule: Rule, options: Options): this
+  private add(prop: string, rule: Rule, options?: Options): this
 }
 
-declare const guard: () => Guard
+declare const list: () => List
 
-export default guard
+export default list

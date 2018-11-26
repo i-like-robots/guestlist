@@ -1,5 +1,5 @@
 const express = require('express')
-const { guard, rule, validate } = require('../')
+const { list, rule, validate } = require('../')
 
 const help = `
 The server is listening on http://localhost:3000
@@ -18,11 +18,11 @@ const formatDate = (date) => date.toISOString().slice(0, 10);
 
 const app = express()
 
-const safelist = guard()
-  .permit('term', rule().isLength({ min: 2 }).trim().escape())
-  .permit('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
-  .permit('date', rule().isISO8601().toDate().customSanitizer(formatDate))
-  .permit('tags', rule().isInt().toInt(), { array: true })
+const safelist = list()
+  .add('term', rule().isLength({ min: 2 }).trim().escape())
+  .add('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
+  .add('date', rule().isISO8601().toDate().customSanitizer(formatDate))
+  .add('tags', rule().isInt().toInt(), { array: true })
 
 app.get('/', (request, response) => {
   const validProperties = validate(request, safelist)

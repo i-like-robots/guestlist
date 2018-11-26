@@ -1,3 +1,3 @@
 export { default as rule, Rule } from './rule'
-export { default as guard, Guard } from './guard'
+export { default as list, List } from './list'
 export { default as validate } from './validate'

@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const { guard, rule, validate } = require('../')
+const { list, rule, validate } = require('../')
 
 const help = `
 The server is listening on http://localhost:3000
@@ -61,11 +61,11 @@ const html = `
 
 const app = express()
 
-const safelist = guard()
-  .permit('name', rule().isLength({ min: 2 }).trim())
-  .permit('age', rule().isInt({ min: 18 }).toInt())
-  .permit('hobbies', rule().isIn(hobbies), { array: true })
-  .permit('ambition', rule().isInt({ min: 1, max: 10 }).toInt())
+const safelist = list()
+  .add('name', rule().isLength({ min: 2 }).trim())
+  .add('age', rule().isInt({ min: 18 }).toInt())
+  .add('hobbies', rule().isIn(hobbies), { array: true })
+  .add('ambition', rule().isInt({ min: 1, max: 10 }).toInt())
 
 app.get('/', (request, response) => {
   response.send(html)
