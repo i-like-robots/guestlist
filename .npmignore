@@ -1,0 +1,6 @@
+examples/
+spec/
+.editorconfig
+.travis.yml
+.prettierrc.json
+rollup.config.js
