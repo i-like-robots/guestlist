@@ -1,6 +1,6 @@
 import validator from 'validator'
 
-const VALIDATORS = new Set([
+const validators = new Set([
   'contains',
   'equals',
   'isAfter',
@@ -26,20 +26,25 @@ const VALIDATORS = new Set([
   'isHexColor',
   'isHexadecimal',
   'isIP',
+  'isIPRange',
   'isISBN',
   'isISIN',
   'isISO31661Alpha2',
+  'isISO31661Alpha3',
   'isISO8601',
   'isISRC',
   'isISSN',
+  'isIdentityCard',
   'isIn',
   'isInt',
   'isJSON',
+  'isJWT',
   'isLatLong',
   'isLength',
   'isLowercase',
   'isMACAddress',
   'isMD5',
+  'isMagnetURI',
   'isMimeType',
   'isMobilePhone',
   'isMongoId',
@@ -47,6 +52,7 @@ const VALIDATORS = new Set([
   'isNumeric',
   'isPort',
   'isPostalCode',
+  'isRFC3339',
   'isSurrogatePair',
   'isURL',
   'isUUID',
@@ -56,7 +62,7 @@ const VALIDATORS = new Set([
   'matches'
 ])
 
-const SANITIZERS = new Set([
+const sanitizers = new Set([
   'blacklist',
   'escape',
   'ltrim',
@@ -104,7 +110,8 @@ export class Rule {
   }
 }
 
-for (const method of VALIDATORS) {
+// Append a proxy for each validator method
+for (const method of validators) {
   if (validator.hasOwnProperty(method)) {
     Rule.prototype[method] = function(...args) {
       this.validators.push({ method: validator[method], args })
@@ -113,7 +120,8 @@ for (const method of VALIDATORS) {
   }
 }
 
-for (const method of SANITIZERS) {
+// Append a proxy for each sanitizer method
+for (const method of sanitizers) {
   if (validator.hasOwnProperty(method)) {
     Rule.prototype[method] = function(...args) {
       this.sanitizers.push({ method: validator[method], args })

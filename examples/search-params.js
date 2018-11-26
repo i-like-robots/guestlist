@@ -1,5 +1,5 @@
 const express = require('express')
-const { guard, rule, secure } = require('../')
+const { list, rule, validate } = require('../')
 
 const help = `
 The server is listening on http://localhost:3000
@@ -18,14 +18,15 @@ const formatDate = (date) => date.toISOString().slice(0, 10);
 
 const app = express()
 
-const queryGuard = guard()
-  .query('term', rule().isLength({ min: 2 }).trim().escape())
-  .query('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
-  .query('date', rule().isISO8601().toDate().customSanitizer(formatDate))
-  .query('tags', rule().isInt().toInt(), { array: true })
+const safelist = list()
+  .add('term', rule().isLength({ min: 2 }).trim().escape())
+  .add('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
+  .add('date', rule().isISO8601().toDate().customSanitizer(formatDate))
+  .add('tags', rule().isInt().toInt(), { array: true })
 
-app.get('/', secure(queryGuard), (req, res) => {
-  res.json(req.query)
+app.get('/', (request, response) => {
+  const validProperties = validate(request, safelist)
+  response.json(validProperties)
 })
 
 app.listen(3000, () => console.log(help))

@@ -7,8 +7,5 @@ export declare const array: (value: any) => string[]
 /// Checks if the given property is null or undefined
 export declare const isDefined: (value: any) => Boolean
 
-/// A much faster but much less safe Object.assign()
-export declare const extend: <T>(target: T, ...items: Object[]) => T
-
-/// Access deep object properties
-export declare const get: (branch: Object, ...branches: Array<String|Number>) => any
+/// Find a property within an object
+export declare const find: (object: Object, property: string, locations: string[]) => any

@@ -2,30 +2,32 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/i-like-robots/guestlist/blob/master/LICENSE) [![Build Status](https://travis-ci.org/i-like-robots/guestlist.svg?branch=master)](https://travis-ci.org/i-like-robots/guestlist) [![Coverage Status](https://coveralls.io/repos/github/i-like-robots/guestlist/badge.svg?branch=master)](https://coveralls.io/github/i-like-robots/guestlist) [![npm version](https://img.shields.io/npm/v/guestlist.svg?style=flat)](https://www.npmjs.com/package/guestlist)
 
-Middleware powered by [validator.js] to whitelist, validate, and sanitize request properties for your [express.js] apps.
+Guestlist is a library powered by [validator.js] to whitelist, validate, and sanitize request properties for your web facing apps (and it works great with [express.js]!)
 
 [validator.js]: https://www.npmjs.com/package/validator
 [express.js]: https://expressjs.com/
 
 ```js
-const { guard, rule, secure } = require('guestlist')
+const { list, rule, validate } = require('guestlist')
 
-const queryGuard = guard()
-  .query('term', rule().isLength({ min: 2 }).trim().escape())
-  .query('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
-  .query('date', rule().isISO8601().toDate())
-  .query('tags', rule().isInt().toInt(), { array: true })
+const safelist = list()
+  .add('term', rule().isLength({ min: 2 }).trim().escape())
+  .add('page', rule().isInt({ min: 1, max: 100 }).toInt(), { default: 1 })
+  .add('date', rule().isISO8601().toDate())
+  .add('tags', rule().isInt().toInt(), { array: true })
 
-app.get('/search', secure(queryGuard), (req, res, next) => { … })
+app.get('/search', (request, response) => {
+  const validProperties = validate(request, safelist)
+})
 ```
 
-With Guestlist protecting your route any request properties that are not expected or do not follow the rules will not be allowed through. In other words:
+Using Guestlist to validate your request properties means that anything not expected or not following the rules will not be allowed through. In other words:
 
 > If you're not on the list, you're not coming in!
 
 ## Installation
 
-This is a [Node.js] module available through the [npm] registry. Node 6 or higher is required.
+This is a [Node.js] module available through the [npm] registry. Node 8 or higher is required.
 
 Installation is done using the [npm install] command:
 
@@ -40,8 +42,8 @@ $ npm install -S guestlist
 ## Features
 
 - Validate and sanitize request parameters with [validator.js]
-- Concise, fluent API
-- Provides middleware functions compatible with express.js and [Fastify]
+- Concise, fluent API to create lists and rules
+- Configurable functions enable compatibility with [express.js], [Fastify], and more
 
 [Fastify]: https://www.fastify.io/
 
@@ -49,47 +51,44 @@ $ npm install -S guestlist
 
 The [express-validator] package also wraps validator.js to provide middleware for your express.js apps and Guestlist shares several similarities. The primary difference between the two modules is the way each handles invalid data:
 
-- Guestlist will ignore invalid or unexpected request properties and remove them from the request object.
+- Guestlist will ignore invalid or unexpected request properties.
 - The express-validator module provides tools for creating error messages and separate methods for retrieving only the valid properties.
 
-If you need to validate the data and return feedback to the user you should use express-validator. If you would rather ignore invalid data then Guestlist may suit you better.
+If you need to validate the data and return feedback to the user you should use express-validator. If you only need to ignore invalid data then Guestlist may suit you better.
 
-One handy feature of Guestlist which is not currently available in express-validator is that it also supports applying validators and sanitizers to an array of values. This is very useful if you need to permit multiple values for a property, for example if you need to accept a form containing a set of checkboxes.
+One feature of Guestlist which is not currently available in express-validator is that it supports applying validators and sanitizers to an array of values. This is very useful if you need to permit multiple values for a property, for example when accepting a form wich implements a set of checkboxes.
 
 [express-validator]: https://express-validator.github.io/docs/
 
 ## Usage
 
-Guestlist has three methods; one to create a list of request properties to expect, a second to create rules for properties to follow, and a third to generate the middleware to protect your route.
+Guestlist has three functions; one to create a safelist of request properties to expect, a second to create rules for a property to follow, and a third to check the request and extract all of the valid properties.
 
-### Guard
+### `list()`
 
-The `guard()` method creates a new list of request properties to expect and the rules associated with them. It provides a method for each request location that can be checked:-
+This function creates a new safelist of request properties to expect and maintains the rules associated with them:
 
-1. `.body(property, rule[, options])`
+```js
+const safelist = list()
+```
 
-    Checks a property submitted in the request body (_note:_ this requires post body parsing middleware to be implemented, such as [`body-parser`](https://www.npmjs.com/package/body-parser)).
+Expected properties are added to the list with the `.add()` method which accepts three arguments: the property name, a rule, and an optional object of `options`.
 
-2. `.cookie(property, rule[, options])`
+```js
+safelist
+  .add(property, rule[, options])
+  .add(property, rule[, options])
+  .add(property, rule[, options])
+```
 
-    Checks a cookie sent with the request cookies (_note:_ this requires cookie parsing middleware to be implemented, such as [`cookie-parser`](https://www.npmjs.com/package/cookie-parser)).
-
-3. `.param(property, rule[, options])`
-
-    Checks a named route parameter.
-
-4. `.query(property, rule[, options])`
-
-    Checks a query string parameter.
-
-Each of the methods accepts an optional `options` object as the final argument. The currently supported options are:-
+The currently supported options for are:
 
 - `array` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
 - `default` Returns a default value for a property which is undefined or invalid.
 
-### Rule
+### `rule()`
 
-The `rule()` method provides a fluent interface for validator.js. All [validator and sanitizer methods][methods] are available and chainable. Validators will always be called before sanitizers and they will be called in the order in which they were declared.
+This function provides a fluent interface for validator.js. All [validator and sanitizer methods][methods] are available and chainable. Validators will always be called before sanitizers and the methods will be called in the order in which they were declared.
 
 Here are a few example rules for validating and sanitizing numbers, dates, and strings:
 
@@ -107,7 +106,7 @@ rule().isISO8601().toDate()
 rule().isLength({ min: 1, max: 10 }).escape().trim()
 ```
 
-Occasionally validator.js may not provide the functionality you require. In these cases you may write a custom validator or sanitizer function:
+Occasionally validator.js may not provide the functionality you require. In these cases you may provide a custom validator or sanitizer function:
 
 ```js
 // Ignore property if a flag is disabled
@@ -121,11 +120,24 @@ rule().isISO8601().toDate().customSanitizer(formatDate)
 
 [methods]: https://www.npmjs.com/package/validator#validators
 
-### Secure
+### `validate(request, safelist[, locations])`
 
-The `secure(guard)` method generates the middleware used to protect your route using the expected properties and rules held by the given guard.
+This function checks a request against a list of rules and extracts all of the valid properties. It accepts three arguments: the request object, a safelist, and an optional array of request objects to check. By default it will look for properties in the following request objects:
 
-Any properties which do not meet the rules will be removed from the request object.
+- `request.body` (requires post body parsing middleware to be implemented, e.g. [body-parser])
+- `request.params`
+- `request.query`
+- `request.cookies` (requires cookie parsing middleware to be implemented, e.g. [cookie-parser])
+
+```js
+const handler = (request, response) => {
+  const validProperties = validate(request, safelist)
+  response.json(validProperties)
+}
+```
+
+[body-parser]: https://www.npmjs.com/package/body-parser
+[cookie-parser]: https://www.npmjs.com/package/cookie-parser
 
 ## Development
 
@@ -134,3 +146,9 @@ Guestlist follows the [Standard] code style, includes [TypeScript] declarations 
 [TypeScript]: https://www.typescriptlang.org/
 [Standard]: https://standardjs.com/
 [Jasmine]: http://jasmine.github.io/
+
+## License
+
+Guestlist is [MIT] licensed.
+
+[MIT]: https://opensource.org/licenses/MIT

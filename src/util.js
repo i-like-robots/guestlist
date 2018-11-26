@@ -1,5 +1,5 @@
 export function single(value) {
-  return Array.isArray(value) ? value.slice(-1).pop() : value
+  return Array.isArray(value) ? value[value.length - 1] : value
 }
 
 export function array(value) {
@@ -10,31 +10,10 @@ export function isDefined(value) {
   return value != null
 }
 
-export function extend(target, ...items) {
-  const len = items.length
-
-  for (let i = 0; i < len; i++) {
-    const item = items[i]
-
-    if (item) {
-      for (const prop in item) {
-        target[prop] = item[prop]
-      }
+export function find(object, property, locations) {
+  for (const location of locations) {
+    if (isDefined(object[location]) && isDefined(object[location][property])) {
+      return object[location][property]
     }
   }
-
-  return target
-}
-
-export function get(branch, ...branches) {
-  for (const leaf of branches) {
-    if (branch.hasOwnProperty(leaf)) {
-      branch = branch[leaf]
-    } else {
-      branch = undefined
-      break
-    }
-  }
-
-  return branch
 }
