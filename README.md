@@ -2,10 +2,12 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/i-like-robots/guestlist/blob/master/LICENSE) [![Build Status](https://travis-ci.org/i-like-robots/guestlist.svg?branch=master)](https://travis-ci.org/i-like-robots/guestlist) [![Coverage Status](https://coveralls.io/repos/github/i-like-robots/guestlist/badge.svg?branch=master)](https://coveralls.io/github/i-like-robots/guestlist) [![npm version](https://img.shields.io/npm/v/guestlist.svg?style=flat)](https://www.npmjs.com/package/guestlist) [![Greenkeeper badge](https://badges.greenkeeper.io/i-like-robots/guestlist.svg)](https://greenkeeper.io/)
 
-Guestlist is a library powered by [validator.js] to whitelist, validate, and sanitize request properties for your web facing apps (and it works great with [express.js]!)
+Guestlist is small utility to help you whitelist, validate, and sanitize request properties for your web facing apps. It's backed by [validator.js] and works great with [Express], [Fastify], [Polkadot], and more.
 
 [validator.js]: https://www.npmjs.com/package/validator
-[express.js]: https://expressjs.com/
+[Express]: https://expressjs.com/
+[Fastify]: https://www.fastify.io/
+[Polkadot]: https://github.com/lukeed/polkadot
 
 ```js
 const { list, rule, validate } = require('guestlist')
@@ -25,6 +27,7 @@ Using Guestlist to validate your request properties means that anything not expe
 
 > If you're not on the list, you're not coming in!
 
+
 ## Installation
 
 This is a [Node.js] module available through the [npm] registry. Node 8 or higher is required.
@@ -39,13 +42,12 @@ $ npm install -S guestlist
 [npm]: http://npmjs.com/
 [npm install]: https://docs.npmjs.com/getting-started/installing-npm-packages-locally
 
+
 ## Features
 
-- Validate and sanitize request parameters with [validator.js]
-- Concise, fluent API to create lists and rules
-- Configurable functions enable compatibility with [express.js], [Fastify], and more
-
-[Fastify]: https://www.fastify.io/
+- Validate and sanitize request parameters with the full power of [validator.js]
+- A concise, fluent API to create lists and rules
+- Configurable functions enable compatibility with [Express], [Fastify], [Polkadot], and more
 
 
 ## API
@@ -134,11 +136,11 @@ const handler = (request, response) => {
 The [express-validator] package also wraps validator.js to provide middleware for your express.js apps and Guestlist shares several similarities. The primary difference between the two modules is the way each handles invalid data:
 
 - Guestlist will ignore invalid or unexpected request properties.
-- The express-validator module provides tools for creating error messages and separate methods for retrieving only the valid properties.
+- express-validator provides tools for creating error messages and separate methods for retrieving only the valid properties.
 
 If you need to validate the data and return feedback to the user you should use express-validator. If you only need to ignore invalid data then Guestlist may suit you better.
 
-One feature of Guestlist which is not currently available in express-validator is that it supports applying validators and sanitizers to an array of values. This is very useful if you need to permit multiple values for a property, for example when accepting a form wich implements a set of checkboxes.
+One feature of Guestlist which is not currently available in express-validator is that it supports applying validators and sanitizers to an array of values. This is very useful if you need to permit multiple values for a property, for example when accepting a form which includes a set of checkboxes or a search page which has multiple filters.
 
 [express-validator]: https://express-validator.github.io/docs/
 
@@ -150,6 +152,7 @@ Guestlist follows the [Standard] code style, includes [TypeScript] declarations 
 [TypeScript]: https://www.typescriptlang.org/
 [Standard]: https://standardjs.com/
 [Jasmine]: http://jasmine.github.io/
+
 
 ## License
 
