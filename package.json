@@ -14,7 +14,7 @@
     "express": "^4.16.4",
     "jasmine": "^3.3.0",
     "node-mocks-http": "^1.7.3",
-    "nyc": "^13.1.0",
+    "nyc": "^14.0.0",
     "prettier": "^1.15.3",
     "rollup": "^1.0.0"
   },
