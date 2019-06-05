@@ -45,6 +45,9 @@ export declare class Rule {
   // check if the string contains ASCII chars only.
   isAscii(): this
 
+  // check if a string is base32 encoded.
+  isBase32(): this
+
   // check if a string is base64 encoded.
   isBase64(): this
 
@@ -272,8 +275,6 @@ export declare class Rule {
   // remove characters that do not appear in the whitelist. The characters are used in a RegExp and so you will
   // need to escape some chars, e.g. whitelist(input, '\\[\\]').
   whitelist(chars: string): this
-
-  toString(): this
 }
 
 declare const rule: () => Rule
