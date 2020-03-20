@@ -6,7 +6,7 @@
   "module": "dist/index.esm.js",
   "types": "types/index.d.ts",
   "dependencies": {
-    "validator": "^11.0.0"
+    "validator": "^13.0.0"
   },
   "devDependencies": {
     "body-parser": "^1.19.0",
