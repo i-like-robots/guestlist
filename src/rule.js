@@ -113,7 +113,7 @@ export class Rule {
 // Append a proxy for each validator method
 for (const method of validators) {
   if (validator.hasOwnProperty(method)) {
-    Rule.prototype[method] = function(...args) {
+    Rule.prototype[method] = function (...args) {
       this.validators.push({ method: validator[method], args })
       return this
     }
@@ -123,7 +123,7 @@ for (const method of validators) {
 // Append a proxy for each sanitizer method
 for (const method of sanitizers) {
   if (validator.hasOwnProperty(method)) {
-    Rule.prototype[method] = function(...args) {
+    Rule.prototype[method] = function (...args) {
       this.sanitizers.push({ method: validator[method], args })
       return this
     }
