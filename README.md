@@ -2,7 +2,7 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/i-like-robots/guestlist/blob/master/LICENSE) [![Build Status](https://travis-ci.org/i-like-robots/guestlist.svg?branch=master)](https://travis-ci.org/i-like-robots/guestlist) [![Coverage Status](https://coveralls.io/repos/github/i-like-robots/guestlist/badge.svg?branch=master)](https://coveralls.io/github/i-like-robots/guestlist) [![npm version](https://img.shields.io/npm/v/guestlist.svg?style=flat)](https://www.npmjs.com/package/guestlist) [![Greenkeeper badge](https://badges.greenkeeper.io/i-like-robots/guestlist.svg)](https://greenkeeper.io/)
 
-Guestlist is small utility to help you whitelist, validate, and sanitize request properties for your web facing apps. It's backed by [validator.js] and works great with [Express], [Fastify], [Polkadot], and more.
+Guestlist is a tiny library that whitelists, validates, and sanitizes HTTP request properties. It's backed by [validator.js] and works great with [Express], [Fastify], [Polkadot], and more.
 
 [validator.js]: https://www.npmjs.com/package/validator
 [Express]: https://expressjs.com/
@@ -46,13 +46,13 @@ $ npm install -S guestlist
 ## Features
 
 - Validate and sanitize request parameters with the full power of [validator.js]
-- A concise, fluent API to create lists and rules
+- A concise, fluent API to create lists of allowed properties and rules to follow
 - Configurable functions enable compatibility with [Express], [Fastify], [Polkadot], and more
 
 
 ## API
 
-Guestlist has three functions; one to create a safelist of request properties to expect, a second to create rules for a property to follow, and a third to check the request and extract all of the valid properties.
+Guestlist provides three functions; one to create a safelist of request properties to expect, a second to create rules for a property to follow, and a third to check the request and extract all of the valid properties.
 
 ### `list()`
 
@@ -62,7 +62,7 @@ This function creates a new safelist of request properties to expect and maintai
 const safelist = list()
 ```
 
-Expected properties are added to the list with the `.add()` method which accepts three arguments: the property name, a rule, and an optional object of `options`.
+Expected properties are added to the list with the `.add()` method which accepts three arguments: the property name, a rule, and an optional `options` object.
 
 ```js
 safelist
@@ -71,14 +71,14 @@ safelist
   .add(property, rule[, options])
 ```
 
-The currently supported options for are:
+The currently supported `options` are:
 
 - `array` If true any single values will be transformed into an array. When false only the last member of any array-like values will be passed through. Defaults to `false`.
 - `default` Returns a default value for a property which is undefined or invalid.
 
 ### `rule()`
 
-This function provides a fluent interface for validator.js. All [validator and sanitizer methods][methods] are available and chainable. Validators will always be called before sanitizers and the methods will be called in the order in which they were declared.
+This function provides a fluent interface for validator.js. All [validator and sanitizer methods][methods] are available and chainable. Validators will always be called before sanitizers and the methods will be called in the order they were declared.
 
 Here are a few example rules for validating and sanitizing numbers, dates, and strings:
 
@@ -100,8 +100,8 @@ Occasionally validator.js may not provide the functionality you require. In thes
 
 ```js
 // Ignore property if a flag is disabled
-const checkFlag = () => flagsPoller.get('allowSorting')
-rule().customValidator(checkFlag).isIn([ 'asc', 'desc' ])
+const checkFlagIsEnabled = () => flags.get('allowSorting') === 'on'
+rule().customValidator(checkFlagIsEnabled)
 
 // Format the date as a YYYY-MM-DD string
 const formatDate = (date) => date.toISOString().slice(0, 10);
@@ -113,7 +113,7 @@ rule().isISO8601().toDate().customSanitizer(formatDate)
 
 ### `validate(request, safelist[, locations])`
 
-This function checks a request against a list of rules and extracts all of the valid properties. It accepts three arguments: the request object, a safelist, and an optional array of request objects to check. By default it will look for properties in the following request objects:
+This function checks a request against a list of rules and extracts all of the valid properties. It accepts three arguments: the request object, a safelist, and an optional array of request properties to check. By default it will look for properties in the following locations:
 
 - `request.body` (requires post body parsing middleware to be implemented, e.g. [body-parser])
 - `request.params`
@@ -123,7 +123,6 @@ This function checks a request against a list of rules and extracts all of the v
 ```js
 const handler = (request, response) => {
   const validProperties = validate(request, safelist)
-  response.json(validProperties)
 }
 ```
 
@@ -147,10 +146,10 @@ One feature of Guestlist which is not currently available in express-validator i
 
 ## Development
 
-Guestlist follows the [Standard] code style, includes [TypeScript] declarations and is tested with [Jasmine].
+Guestlist uses [Prettier] for code formatting, includes [TypeScript] declarations and is tested with [Jasmine].
 
 [TypeScript]: https://www.typescriptlang.org/
-[Standard]: https://standardjs.com/
+[Prettier]: https://prettier.io/
 [Jasmine]: http://jasmine.github.io/
 
 
