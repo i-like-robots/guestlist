@@ -1,11 +1,11 @@
-import validator from 'validator'
+import ValidatorJS from 'validator'
 
 export declare type Criterion = {
   method: Function
   args: Array<any>
 }
 
-declare type IdentityCardLocale = 'any' | 'ES'
+declare type IdentityCardLocale = 'ES' | 'he-IL' | 'zh-TW'
 
 export declare class Rule {
   validators: Array<Criterion>
@@ -53,6 +53,9 @@ export declare class Rule {
 
   // check if the string is a date that's before the specified date.
   isBefore(date?: string): this
+
+  // Check if a string is a BIC (Bank Identification Code) or SWIFT code.
+  isBIC(): this
 
   // check if a string is a boolean.
   isBoolean(): this
@@ -102,11 +105,11 @@ export declare class Rule {
   // 'tiger160', 'tiger192', 'crc32', 'crc32b']
   isHash(algorithm: ValidatorJS.HashAlgorithm): this
 
-  // check if the string is a hexadecimal color.
-  isHexColor(): this
-
   // check if the string is a hexadecimal number.
   isHexadecimal(): this
+
+  // check if the string is a hexadecimal color.
+  isHexColor(): this
 
   // check if the string is a valid identity card code.
   isIdentityCard(locale?: IdentityCardLocale): this
@@ -168,7 +171,7 @@ export declare class Rule {
   isLowercase(): this
 
   // check if the string is a MAC address.
-  isMACAddress(): this
+  isMACAddress(options?: ValidatorJS.IsMACAddressOptions): this
 
   // check if the string is a MD5 hash.
   isMD5(): this
@@ -198,6 +201,9 @@ export declare class Rule {
   // check if the string contains only numbers.
   isNumeric(options?: ValidatorJS.IsNumericOptions): this
 
+  // check if the string is a valid octal number.
+  isOctal(): this
+
   // check if the string is a valid port number.
   isPort(): this
 
@@ -207,6 +213,9 @@ export declare class Rule {
   // 'SE', 'TW', 'US', 'ZA', 'ZM' ]) OR 'any'. If 'any' is used, function will check if any of the
   // locales match).
   isPostalCode(locale: ValidatorJS.PostalCodeLocale): this
+
+  // Check if the string is of type slug.
+  isSlug(): this
 
   // check if the string contains any surrogate pairs chars.
   isSurrogatePair(): this
