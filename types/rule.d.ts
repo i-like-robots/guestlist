@@ -5,7 +5,14 @@ export declare type Criterion = {
   args: Array<any>
 }
 
-declare type IdentityCardLocale = 'ES' | 'he-IL' | 'zh-TW'
+declare interface IsIMEIOptions {
+  /**
+   * @default false
+   */
+  allow_hyphens: boolean
+}
+
+declare type IsTaxIDLocale = 'en-US'
 
 export declare class Rule {
   validators: Array<Criterion>
@@ -60,6 +67,9 @@ export declare class Rule {
   // check if a string is a boolean.
   isBoolean(): this
 
+  // check if the string is a valid BTC address.
+  isBtcAddress(): this;
+
   // check if the string's length (in bytes) falls in a range.
   isByteLength(options: ValidatorJS.IsByteLengthOptions): this
   isByteLength(min: number, max?: number): this
@@ -73,8 +83,8 @@ export declare class Rule {
   // check if the string is a data uri format (https://developer.mozilla.org/en-US/docs/Web/HTTP/data_URIs)
   isDataURI(): this
 
-  // check if the string is a magnet uri format (https://en.wikipedia.org/wiki/Magnet_URI_scheme).
-  isMagnetURI(): this
+  // check if the input is a valid date, defaults to YYYY/MM/DD.
+  isDate(format?: string): this
 
   // check if the string represents a decimal number, such as 0.1, .3, 1.1, 1.00003, 4.0, etc.
   isDecimal(options?: ValidatorJS.IsDecimalOptions): this
@@ -82,11 +92,17 @@ export declare class Rule {
   // check if the string is a number that's divisible by another.
   isDivisibleBy(number: number): this
 
+  // check if the string is an EAN (European Article Number).
+  isEAN(): this;
+
   // check if the string is an email.
   isEmail(options?: ValidatorJS.IsEmailOptions): this
 
   // check if the string has a length of zero.
   isEmpty(): this
+
+  // check if the string is an Ethereum address using basic regex.
+  isEthereumAddress(): this
 
   // check if the string is a fully qualified domain name (e.g. domain.com).
   isFQDN(options?: ValidatorJS.IsFQDNOptions): this
@@ -111,8 +127,17 @@ export declare class Rule {
   // check if the string is a hexadecimal color.
   isHexColor(): this
 
+  // check if the string is an HSL color based on CSS Colors Level 4 specification.
+  isHSL(): this;
+
+  // check if a string is a IBAN (International Bank Account Number).
+  isIBAN(): this;
+
   // check if the string is a valid identity card code.
-  isIdentityCard(locale?: IdentityCardLocale): this
+  isIdentityCard(locale?: ValidatorJS.IdentityCardLocale): this
+
+  // check if the string is a valid IMEI number.
+  isIMEI(options?: IsIMEIOptions): this
 
   // check if the string is an IP (version 4 or 6).
   isIP(version?: number): this
@@ -123,18 +148,12 @@ export declare class Rule {
   // check if the string is an ISBN (version 10 or 13).
   isISBN(version?: number): this
 
-  // check if the string is an ISSN (https://en.wikipedia.org/wiki/International_Standard_Serial_Number).
-  isISSN(options?: ValidatorJS.IsISSNOptions): this
-
   // check if the string is an ISIN (https://en.wikipedia.org/wiki/International_Securities_Identification_Number)
   // (stock/security identifier).
   isISIN(): this
 
   // check if the string is a valid ISO 8601 (https://en.wikipedia.org/wiki/ISO_8601) date.
   isISO8601(options?: ValidatorJS.IsISO8601Options): this
-
-  // check if the string is a valid RFC 3339 date (https://tools.ietf.org/html/rfc3339).
-  isRFC3339(): this
 
   // check if the string is a valid ISO 3166-1 alpha-2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) officially assigned
   // country code.
@@ -146,6 +165,9 @@ export declare class Rule {
 
   // check if the string is a ISRC (https://en.wikipedia.org/wiki/International_Standard_Recording_Code).
   isISRC(): this
+
+  // check if the string is an ISSN (https://en.wikipedia.org/wiki/International_Standard_Serial_Number).
+  isISSN(options?: ValidatorJS.IsISSNOptions): this
 
   // check if the string is in a array of allowed values.
   isIn(values: any[]): this
@@ -167,11 +189,17 @@ export declare class Rule {
   isLength(options: ValidatorJS.IsLengthOptions): this
   isLength(min: number, max?: number): this
 
+  // check if the string is a locale.
+  isLocale(): this;
+
   // check if the string is lowercase.
   isLowercase(): this
 
   // check if the string is a MAC address.
   isMACAddress(options?: ValidatorJS.IsMACAddressOptions): this
+
+  // check if the string is a magnet uri format (https://en.wikipedia.org/wiki/Magnet_URI_scheme).
+  isMagnetURI(): this
 
   // check if the string is a MD5 hash.
   isMD5(): this
@@ -204,6 +232,9 @@ export declare class Rule {
   // check if the string is a valid octal number.
   isOctal(): this
 
+  // check if the string is a valid passport number relative to a specific country code.
+  isPassportNumber(countryCode?: string): this
+
   // check if the string is a valid port number.
   isPort(): this
 
@@ -214,11 +245,23 @@ export declare class Rule {
   // locales match).
   isPostalCode(locale: ValidatorJS.PostalCodeLocale): this
 
+  // check if the string is a valid RFC 3339 date (https://tools.ietf.org/html/rfc3339).
+  isRFC3339(): this
+
+  // check if the string is a rgb or rgba color.
+  isRgbColor(includePercentValues?: boolean): this;
+
+  // check if the string is a Semantic Versioning Specification (SemVer).
+  isSemVer(): this;
+
   // Check if the string is of type slug.
   isSlug(): this
 
   // check if the string contains any surrogate pairs chars.
   isSurrogatePair(): this
+
+  // check if the given value is a valid Tax Identification Number, default locale is en-US
+  isTaxID(locale?: IsTaxIDLocale): this
 
   // check if the string is an URL.
   isURL(options?: ValidatorJS.IsURLOptions): this
