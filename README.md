@@ -1,6 +1,6 @@
 # Guestlist
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/i-like-robots/guestlist/blob/master/LICENSE) [![Build Status](https://travis-ci.org/i-like-robots/guestlist.svg?branch=master)](https://travis-ci.org/i-like-robots/guestlist) [![Coverage Status](https://coveralls.io/repos/github/i-like-robots/guestlist/badge.svg?branch=master)](https://coveralls.io/github/i-like-robots/guestlist) [![npm version](https://img.shields.io/npm/v/guestlist.svg?style=flat)](https://www.npmjs.com/package/guestlist) [![Greenkeeper badge](https://badges.greenkeeper.io/i-like-robots/guestlist.svg)](https://greenkeeper.io/)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/i-like-robots/guestlist/blob/main/LICENSE) [![Build Status](https://travis-ci.org/i-like-robots/guestlist.svg?branch=main)](https://travis-ci.org/i-like-robots/guestlist) [![Coverage Status](https://coveralls.io/repos/github/i-like-robots/guestlist/badge.svg?branch=main)](https://coveralls.io/github/i-like-robots/guestlist) [![npm version](https://img.shields.io/npm/v/guestlist.svg?style=flat)](https://www.npmjs.com/package/guestlist) [![Greenkeeper badge](https://badges.greenkeeper.io/i-like-robots/guestlist.svg)](https://greenkeeper.io/)
 
 Guestlist is a tiny library that whitelists, validates, and sanitizes HTTP request properties. It's backed by [validator.js] and works great with [Express], [Fastify], [Polkadot], and more.
 
